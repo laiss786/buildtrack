@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildTrack | Register</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="auth-wrapper">
+    <div class="auth-brand">
+      <div class="brand-eyebrow">Create Enterprise Account</div>
+      <h1 class="brand-title">BUILD<br><span>TRACK</span></h1>
+      <p class="brand-desc">
+        Join the modern contractors who've moved beyond spreadsheets. Get your construction command centre up in under 60 seconds.
+      </p>
+      <div class="brand-stats">
+        <div>
+          <div class="brand-stat-num">FREE</div>
+          <div class="brand-stat-label">To Get Started</div>
+        </div>
+        <div>
+          <div class="brand-stat-num">&lt;60s</div>
+          <div class="brand-stat-label">Setup Time</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <h2 class="auth-card-title">Create Account</h2>
+        <p class="auth-card-subtitle">Set up your enterprise workspace in seconds.</p>
+
+        <div class="field-group">
+          <label class="field-label">Full Name</label>
+          <input type="text" id="name" class="field-input" placeholder="Your name" autocomplete="name">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Work Email</label>
+          <input type="email" id="email" class="field-input" placeholder="you@company.com" autocomplete="email">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" id="password" class="field-input" placeholder="Min. 6 characters" autocomplete="new-password">
+        </div>
+
+        <p id="errorMsg"></p>
+
+        <button class="auth-btn" onclick="register()">Create Account</button>
+
+        <div class="auth-footer">
+          Already registered? <a href="login.html">Sign in here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

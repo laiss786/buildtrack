@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildTrack | Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="auth-wrapper">
+    <div class="auth-brand">
+      <div class="brand-eyebrow">Secure Admin Access</div>
+      <h1 class="brand-title">BUILD<br><span>TRACK</span></h1>
+      <p class="brand-desc">
+        Every log, every labourer, every rupee — all in one place. Login and take control of your construction portfolio.
+      </p>
+      <div class="brand-stats">
+        <div>
+          <div class="brand-stat-num">256</div>
+          <div class="brand-stat-label">Bit Encrypted</div>
+        </div>
+        <div>
+          <div class="brand-stat-num">24/7</div>
+          <div class="brand-stat-label">Uptime</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <h2 class="auth-card-title">Sign In</h2>
+        <p class="auth-card-subtitle">Enter your credentials to access the dashboard.</p>
+
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <input type="email" id="email" class="field-input" placeholder="admin@yoursite.com" autocomplete="email">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" id="password" class="field-input" placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <p id="errorMsg"></p>
+
+        <button class="auth-btn" onclick="login()">Access Dashboard</button>
+
+        <div class="auth-footer">
+          Don't have an account? <a href="register.html">Create one here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

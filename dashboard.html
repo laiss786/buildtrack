@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BuildTrack | Command Centre</title>
+
+  <!-- ── PWA Meta Tags ── -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#F5A623">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BuildTrack">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96.png">
+
+  <!-- ── Styles ── -->
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">BT</div>
+      <span class="logo-text">BUILDTRACK</span>
+    </div>
+    <ul class="sidebar-nav">
+      <li class="nav-item active" data-section="projects"   data-label="Projects">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <span class="nav-label">Projects</span>
+      </li>
+      <li class="nav-item" data-section="dailyLogs"  data-label="Site Journal">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+        <span class="nav-label">Site Journal</span>
+      </li>
+      <li class="nav-item" data-section="labourers"  data-label="Labourers">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="nav-label">Labourers</span>
+      </li>
+      <li class="nav-item" data-section="attendance" data-label="Attendance">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+        <span class="nav-label">Attendance</span>
+      </li>
+      <li class="nav-item" data-section="payroll"    data-label="Payroll">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+        <span class="nav-label">Payroll</span>
+      </li>
+      <li class="nav-item" data-section="materials"  data-label="Materials">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+        <span class="nav-label">Materials</span>
+      </li>
+      <li class="nav-item" data-section="expenses"   data-label="Expenses">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <span class="nav-label">Expenses</span>
+      </li>
+      <li class="nav-item" data-section="issues"     data-label="Site Issues">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <span class="nav-label">Site Issues</span>
+      </li>
+      <li class="nav-item" data-section="documents"  data-label="Documents">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="nav-label">Documents</span>
+      </li>
+      <li class="nav-item" data-section="reports"    data-label="Reports">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+        <span class="nav-label">Reports</span>
+      </li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar" id="userInitial">–</div>
+        <div class="user-info">
+          <div class="user-name" id="userEmail">Loading...</div>
+          <div class="user-role">Contractor</div>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+        <span class="nav-label">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">PROJECTS</div>
+      <div class="topbar-right">
+        <div class="topbar-badge"><span class="status-dot"></span>Firebase Live</div>
+      </div>
+    </div>
+
+    <!-- ─── 1. PROJECTS ─── -->
+    <section id="projects" class="section active">
+      <div class="section-header">
+        <div><h1 class="page-title">Project Portfolio</h1><p class="page-sub">Manage and monitor all active construction sites.</p></div>
+        <button class="btn btn-primary" onclick="openModal('projectModal')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Project
+        </button>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card gold"><div class="stat-label">Total Projects</div><div class="stat-value" id="totalProjectCount">—</div></div>
+        <div class="stat-card green"><div class="stat-label">Active Sites</div><div class="stat-value green" id="activeSiteCount">—</div></div>
+        <div class="stat-card blue"><div class="stat-label">Completed</div><div class="stat-value blue" id="completedCount">—</div></div>
+      </div>
+      <div id="projectsGrid" class="projects-grid"></div>
+
+      <!-- Project Modal -->
+      <div id="projectModal" class="modal">
+        <div class="modal-box">
+          <div class="modal-header">
+            <div><div class="modal-title">New Project</div><div class="modal-subtitle">Initialize a new site for full tracking.</div></div>
+            <button class="modal-close" onclick="closeModal('projectModal')">&times;</button>
+          </div>
+          <form id="projectForm">
+            <div class="form-group"><label class="form-label">Project Name <span style="color:var(--danger)">*</span></label><input type="text" id="projName" class="form-control" placeholder="e.g., Skyview Residency Block A" required></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Client *</label><input type="text" id="projClient" class="form-control" placeholder="Owner name" required></div>
+              <div class="form-group"><label class="form-label">Start Date *</label><input type="date" id="projStart" class="form-control" required></div>
+            </div>
+            <div class="form-section">
+              <div class="form-section-title">Financial & Site Details</div>
+              <div class="form-row cols-2">
+                <div class="form-group" style="margin-bottom:0"><label class="form-label">Est. Budget (₹)</label><input type="number" id="projBudget" class="form-control" placeholder="0.00"></div>
+                <div class="form-group" style="margin-bottom:0"><label class="form-label">Expected End Date</label><input type="date" id="projEndDate" class="form-control"></div>
+              </div>
+              <div class="form-group" style="margin-top:14px;"><label class="form-label">Site Area (Sqft)</label><input type="number" id="projArea" class="form-control" placeholder="Total area"></div>
+              <div class="form-group" style="margin-bottom:0"><label class="form-label">Site Address</label><textarea id="projAddress" class="form-control" rows="2" placeholder="Full location..."></textarea></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('projectModal')">Discard</button>
+              <button type="submit" id="saveProjBtn" class="btn btn-primary" style="min-width:150px;">Launch Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 2. SITE JOURNAL ─── -->
+    <section id="dailyLogs" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Site Journal</h1><p class="page-sub">Daily progress entries and labour strength records.</p></div>
+      </div>
+      <div class="logs-layout">
+        <div class="logs-form-sticky">
+          <div class="card">
+            <div style="margin-bottom:18px;"><div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">New Entry</div><div style="font-size:1.05rem;font-weight:700;">Post a Journal Update</div></div>
+            <form id="logForm">
+              <div class="form-group"><label class="form-label">Project</label><select id="logProjectSelect" class="form-control" required><option value="">Select project...</option></select></div>
+              <div class="form-group"><label class="form-label">Date</label><input type="date" id="logDateInput" class="form-control" required></div>
+              <div class="form-group"><label class="form-label">Workers on Site</label><input type="number" id="labourCount" class="form-control" placeholder="e.g. 12" required></div>
+              <div class="form-group"><label class="form-label">Work Description</label><textarea id="logDesc" class="form-control" rows="4" placeholder="What was accomplished today?" required></textarea></div>
+              <div class="form-group"><label class="form-label">Weather</label>
+                <select id="logWeather" class="form-control">
+                  <option value="Clear">☀️ Clear</option><option value="Cloudy">⛅ Cloudy</option>
+                  <option value="Rain">🌧️ Rain</option><option value="Heavy Rain">⛈️ Heavy Rain</option>
+                  <option value="Hot">🌡️ Extreme Heat</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-full" style="margin-top:4px;">Post Entry</button>
+            </form>
+          </div>
+        </div>
+        <div id="logsFeed" class="timeline"></div>
+      </div>
+    </section>
+
+    <!-- ─── 3. LABOURERS ─── -->
+    <section id="labourers" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Labourer Roster</h1><p class="page-sub">All registered workers across your projects.</p></div>
+        <button class="btn btn-primary" onclick="openAddLabourerModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Labourer
+        </button>
+      </div>
+      <div class="wage-summary" id="labourerStats">
+        <div class="wage-chip"><div class="wage-chip-label">Total Workers</div><div class="wage-chip-val" id="totalLabourers">—</div></div>
+        <div class="wage-chip"><div class="wage-chip-label">Daily Wage Bill</div><div class="wage-chip-val" id="dailyWageBill">—</div></div>
+        <div class="wage-chip"><div class="wage-chip-label">Monthly Estimate</div><div class="wage-chip-val" id="monthlyWageBill">—</div></div>
+        <div class="wage-chip"><div class="wage-chip-label">Avg Wage/Day</div><div class="wage-chip-val" id="avgWage">—</div></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <div class="search-input-wrap" style="flex:1;min-width:200px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="labourerSearch" class="form-control search-input" placeholder="Search by name or role...">
+        </div>
+        <select id="labourerProjectFilter" class="form-control" style="width:auto;"><option value="">All Projects</option></select>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <table class="data-table">
+          <thead><tr>
+            <th>Worker</th><th>Role</th><th>Wage/Day</th>
+            <th>Phone</th><th>Project</th><th>Joined</th><th style="text-align:center;">Actions</th>
+          </tr></thead>
+          <tbody id="labourersTableBody"><tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3);">Loading...</td></tr></tbody>
+        </table>
+      </div>
+      <div id="labourerModal" class="modal">
+        <div class="modal-box">
+          <div class="modal-header">
+            <div><div class="modal-title">Add Labourer</div><div class="modal-subtitle">Register a worker for attendance and payroll tracking.</div></div>
+            <button class="modal-close" onclick="closeModal('labourerModal')">&times;</button>
+          </div>
+          <form id="labourerForm">
+            <div class="form-group"><label class="form-label">Full Name *</label><input type="text" id="labourerName" class="form-control" placeholder="Worker's full name" required></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Role / Trade</label><input type="text" id="labourerRole" class="form-control" placeholder="e.g. Mason, Carpenter"></div>
+              <div class="form-group"><label class="form-label">Wage / Day (₹)</label><input type="number" id="labourerWage" class="form-control" placeholder="500"></div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="labourerPhone" class="form-control" placeholder="9XXXXXXXXX"></div>
+              <div class="form-group"><label class="form-label">ID / Aadhaar (last 4)</label><input type="text" id="labourerID" class="form-control" maxlength="4" placeholder="XXXX"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Assign to Project</label><select id="labourerProjectSelect" class="form-control"><option value="">Select project...</option></select></div>
+            <div class="form-group"><label class="form-label">Notes</label><textarea id="labourerNotes" class="form-control" rows="2" placeholder="Skills, emergency contact, etc."></textarea></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('labourerModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary" style="min-width:130px;">Add Worker</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 4. ATTENDANCE ─── -->
+    <section id="attendance" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Daily Attendance</h1><p class="page-sub">Mark and track worker attendance for any date.</p></div>
+        <div class="tab-bar" style="margin-bottom:0;">
+          <button class="tab-btn active" onclick="switchAttTab('mark',this)">Mark Today</button>
+          <button class="tab-btn" onclick="switchAttTab('history',this)">History</button>
+        </div>
+      </div>
+      <div id="attMarkTab">
+        <div class="att-action-row">
+          <input type="date" id="attendanceDate" class="form-control" style="width:auto;">
+          <select id="attendanceProjectFilter" class="form-control" style="width:auto;"><option value="">All Projects</option></select>
+          <button class="btn btn-secondary btn-sm" onclick="markAll('present')">✅ Mark All Present</button>
+          <button class="btn btn-secondary btn-sm" onclick="markAll('absent')">❌ Mark All Absent</button>
+          <button id="saveAttendanceBtn" class="btn btn-primary" style="margin-left:auto;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Save Attendance
+          </button>
+        </div>
+        <div class="att-summary-chips" id="attSummaryChips" style="display:none;">
+          <div class="summary-chip chip-present"><span class="dot"></span><span id="presentCount">0</span> Present</div>
+          <div class="summary-chip chip-absent"><span class="dot"></span><span id="absentCount">0</span> Absent</div>
+          <div class="summary-chip chip-total"><span class="dot"></span><span id="pendingCount">0</span> Pending</div>
+        </div>
+        <div id="attendanceTileGrid" class="att-grid"></div>
+      </div>
+      <div id="attHistoryTab" style="display:none;">
+        <div class="att-history-filters">
+          <input type="date" id="historyDate" class="form-control" style="width:auto;">
+          <select id="historyProjectFilter" class="form-control" style="width:auto;"><option value="">All Projects</option></select>
+          <button class="btn btn-secondary btn-sm" onclick="loadAttHistory()">Load Report</button>
+        </div>
+        <div id="attHistoryTable">
+          <div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Select a date to load attendance history</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 5. PAYROLL ─── -->
+    <section id="payroll" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Payroll</h1><p class="page-sub">Calculate wages based on attendance records.</p></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <select id="payrollMonth" class="form-control" style="width:auto;"></select>
+          <select id="payrollProjectFilter" class="form-control" style="width:auto;"><option value="">All Projects</option></select>
+          <button class="btn btn-primary" onclick="calculatePayroll()">Calculate</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+        <div class="stat-card gold"><div class="stat-label">Total Payable</div><div class="stat-value gold" id="payrollTotal">₹—</div></div>
+        <div class="stat-card green"><div class="stat-label">Paid</div><div class="stat-value green" id="payrollPaid">₹—</div></div>
+        <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="payrollPending">₹—</div></div>
+        <div class="stat-card"><div class="stat-label">Workers</div><div class="stat-value" id="payrollWorkers">—</div></div>
+      </div>
+      <div class="payroll-header"><div>Worker</div><div>Days</div><div>Rate</div><div>Gross</div><div>Net</div><div>Status</div></div>
+      <div id="payrollList"><div class="empty-state"><div class="empty-icon">💳</div><div class="empty-title">Select a month and calculate payroll</div></div></div>
+    </section>
+
+    <!-- ─── 6. MATERIALS ─── -->
+    <section id="materials" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Materials &amp; Inventory</h1><p class="page-sub">Track all materials in shed and on site.</p></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div class="storage-toggle">
+            <button class="storage-pill active" onclick="switchStorage('shed',this)">🏚️ Shed</button>
+            <button class="storage-pill" onclick="switchStorage('site',this)">🏗️ On Site</button>
+            <button class="storage-pill" onclick="switchStorage('all',this)">📦 All</button>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('materialModal')">+ Add Stock</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-label">Total Items</div><div class="stat-value" id="matTotalItems">—</div></div>
+        <div class="stat-card red"><div class="stat-label">Low Stock Alerts</div><div class="stat-value red" id="matLowStock">—</div></div>
+        <div class="stat-card gold"><div class="stat-label">In Shed</div><div class="stat-value gold" id="matInShed">—</div></div>
+        <div class="stat-card blue"><div class="stat-label">On Site</div><div class="stat-value blue" id="matOnSite">—</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+        <div class="search-input-wrap" style="flex:1;min-width:180px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="materialSearch" class="form-control search-input" placeholder="Search materials...">
+        </div>
+        <select id="materialCategoryFilter" class="form-control" style="width:auto;">
+          <option value="">All Categories</option>
+          <option value="Cement">Cement</option><option value="Sand">Sand</option>
+          <option value="Steel">Steel</option><option value="Bricks">Bricks</option>
+          <option value="Tools">Tools</option><option value="Electrical">Electrical</option>
+          <option value="Plumbing">Plumbing</option><option value="Other">Other</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="openModal('transferModal')">↔ Transfer</button>
+      </div>
+      <div id="materialsGrid"></div>
+      <div style="margin-top:28px;">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;">Recent Transactions</div>
+        <div id="materialTxnList" class="txn-list"></div>
+      </div>
+      <div id="materialModal" class="modal">
+        <div class="modal-box">
+          <div class="modal-header">
+            <div><div class="modal-title">Add / Update Stock</div><div class="modal-subtitle">Record incoming materials to shed or site.</div></div>
+            <button class="modal-close" onclick="closeModal('materialModal')">&times;</button>
+          </div>
+          <form id="materialForm">
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Material Name *</label><input type="text" id="matName" class="form-control" placeholder="e.g. OPC 53 Cement" required></div>
+              <div class="form-group"><label class="form-label">Category *</label>
+                <select id="matCategory" class="form-control" required>
+                  <option value="">Select...</option>
+                  <option>Cement</option><option>Sand</option><option>Steel</option>
+                  <option>Bricks</option><option>Tools</option><option>Electrical</option>
+                  <option>Plumbing</option><option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Quantity *</label><input type="number" id="matQty" class="form-control" placeholder="e.g. 50" step="0.01" required></div>
+              <div class="form-group"><label class="form-label">Unit</label>
+                <select id="matUnit" class="form-control">
+                  <option>bags</option><option>kg</option><option>tonnes</option>
+                  <option>cu.ft</option><option>cu.m</option><option>pcs</option>
+                  <option>rods</option><option>litres</option><option>units</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Location</label>
+                <select id="matLocation" class="form-control">
+                  <option value="shed">Shed</option><option value="site">On Site</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Low Stock Alert (qty)</label><input type="number" id="matMinStock" class="form-control" placeholder="e.g. 10"></div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Project</label><select id="matProject" class="form-control"><option value="">General/Shed</option></select></div>
+              <div class="form-group"><label class="form-label">Cost per Unit (₹)</label><input type="number" id="matCostPerUnit" class="form-control" placeholder="0.00" step="0.01"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Supplier / Notes</label><input type="text" id="matNotes" class="form-control" placeholder="Supplier name or remarks"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('materialModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Add to Inventory</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="transferModal" class="modal">
+        <div class="modal-box" style="max-width:440px;">
+          <div class="modal-header">
+            <div><div class="modal-title">Transfer Stock</div><div class="modal-subtitle">Move materials between shed and site.</div></div>
+            <button class="modal-close" onclick="closeModal('transferModal')">&times;</button>
+          </div>
+          <form id="transferForm">
+            <div class="form-group"><label class="form-label">Material *</label><select id="transferMaterial" class="form-control" required><option value="">Select material...</option></select></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">From</label><select id="transferFrom" class="form-control"><option value="shed">Shed</option><option value="site">Site</option></select></div>
+              <div class="form-group"><label class="form-label">Quantity *</label><input type="number" id="transferQty" class="form-control" placeholder="Qty" step="0.01" required></div>
+            </div>
+            <div class="form-group"><label class="form-label">Destination Project</label><select id="transferProject" class="form-control"><option value="">General</option></select></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('transferModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Transfer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 7. EXPENSES ─── -->
+    <section id="expenses" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Expense Tracker</h1><p class="page-sub">All project costs and expenditure records.</p></div>
+        <button class="btn btn-primary" onclick="openModal('expenseModal')">+ Add Expense</button>
+      </div>
+      <div class="expense-stats">
+        <div class="stat-card red"><div class="stat-label">Total Spent</div><div class="stat-value red" id="expTotalSpent">₹—</div></div>
+        <div class="stat-card gold"><div class="stat-label">This Month</div><div class="stat-value gold" id="expThisMonth">₹—</div></div>
+        <div class="stat-card green"><div class="stat-label">Remaining Budget</div><div class="stat-value green" id="expRemaining">₹—</div></div>
+        <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value" id="expCount">—</div></div>
+      </div>
+      <div class="budget-bar-wrap card" style="padding:18px 22px;">
+        <div class="budget-bar-label">
+          <span>Budget Utilisation</span>
+          <span id="expBudgetPct">—%</span>
+        </div>
+        <div class="budget-bar-track"><div class="budget-bar-fill" id="expBudgetBar" style="width:0%;background:var(--success);"></div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;margin-top:20px;">
+        <div class="expense-category-filter" id="expCatFilters">
+          <button class="cat-filter-btn active" data-cat="">All</button>
+          <button class="cat-filter-btn" data-cat="Labour">👷 Labour</button>
+          <button class="cat-filter-btn" data-cat="Materials">🧱 Materials</button>
+          <button class="cat-filter-btn" data-cat="Equipment">🔧 Equipment</button>
+          <button class="cat-filter-btn" data-cat="Transport">🚛 Transport</button>
+          <button class="cat-filter-btn" data-cat="Miscellaneous">📎 Misc</button>
+        </div>
+        <select id="expProjectFilter" class="form-control" style="width:auto;margin-left:auto;"><option value="">All Projects</option></select>
+      </div>
+      <div id="expenseRows" class="expense-rows"></div>
+      <div id="expenseModal" class="modal">
+        <div class="modal-box">
+          <div class="modal-header">
+            <div><div class="modal-title">Add Expense</div><div class="modal-subtitle">Record a new cost against a project.</div></div>
+            <button class="modal-close" onclick="closeModal('expenseModal')">&times;</button>
+          </div>
+          <form id="expenseForm">
+            <div class="form-group"><label class="form-label">Description *</label><input type="text" id="expDesc" class="form-control" placeholder="e.g. Bought 50 bags OPC cement" required></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Amount (₹) *</label><input type="number" id="expAmount" class="form-control" placeholder="0.00" step="0.01" required></div>
+              <div class="form-group"><label class="form-label">Date *</label><input type="date" id="expDate" class="form-control" required></div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Category</label>
+                <select id="expCategory" class="form-control">
+                  <option>Labour</option><option>Materials</option><option>Equipment</option>
+                  <option>Transport</option><option>Miscellaneous</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Project</label><select id="expProject" class="form-control"><option value="">General</option></select></div>
+            </div>
+            <div class="form-group"><label class="form-label">Paid To / Vendor</label><input type="text" id="expVendor" class="form-control" placeholder="Vendor / contractor name"></div>
+            <div class="form-group"><label class="form-label">Payment Mode</label>
+              <select id="expPayMode" class="form-control">
+                <option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Cheque</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Notes</label><textarea id="expNotes" class="form-control" rows="2" placeholder="Additional details..."></textarea></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('expenseModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Record Expense</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 8. SITE ISSUES ─── -->
+    <section id="issues" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Site Issues &amp; Snag List</h1><p class="page-sub">Track problems, defects, and punch list items.</p></div>
+        <button class="btn btn-primary" onclick="openModal('issueModal')">+ Report Issue</button>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+        <div class="stat-card red"><div class="stat-label">Open</div><div class="stat-value red" id="issueOpenCount">—</div></div>
+        <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value" id="issueProgressCount">—</div></div>
+        <div class="stat-card green"><div class="stat-label">Resolved</div><div class="stat-value green" id="issueResolvedCount">—</div></div>
+        <div class="stat-card gold"><div class="stat-label">Total</div><div class="stat-value gold" id="issueTotalCount">—</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <div class="tab-bar" style="margin-bottom:0;">
+          <button class="tab-btn active" onclick="filterIssues('all',this)">All</button>
+          <button class="tab-btn" onclick="filterIssues('open',this)">Open</button>
+          <button class="tab-btn" onclick="filterIssues('in-progress',this)">In Progress</button>
+          <button class="tab-btn" onclick="filterIssues('resolved',this)">Resolved</button>
+        </div>
+        <select id="issueProjectFilter" class="form-control" style="width:auto;margin-left:auto;"><option value="">All Projects</option></select>
+      </div>
+      <div id="issueList" class="issue-list"></div>
+      <div id="issueModal" class="modal">
+        <div class="modal-box">
+          <div class="modal-header">
+            <div><div class="modal-title">Report Site Issue</div><div class="modal-subtitle">Log a problem or snag item for resolution.</div></div>
+            <button class="modal-close" onclick="closeModal('issueModal')">&times;</button>
+          </div>
+          <form id="issueForm">
+            <div class="form-group"><label class="form-label">Issue Title *</label><input type="text" id="issueTitle" class="form-control" placeholder="e.g. Crack in column C4" required></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Severity</label>
+                <select id="issueSeverity" class="form-control">
+                  <option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🔵 Low</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Project</label><select id="issueProject" class="form-control"><option value="">Select...</option></select></div>
+            </div>
+            <div class="form-group"><label class="form-label">Description</label><textarea id="issueDesc" class="form-control" rows="3" placeholder="Describe the problem in detail..."></textarea></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Reported Date</label><input type="date" id="issueDate" class="form-control"></div>
+              <div class="form-group"><label class="form-label">Assigned To</label><input type="text" id="issueAssigned" class="form-control" placeholder="Person responsible"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('issueModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Report Issue</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 9. DOCUMENTS ─── -->
+    <section id="documents" class="section">
+      <div class="section-header">
+        <div>
+          <h1 class="page-title">Document Vault</h1>
+          <p class="page-sub">Blueprints, permits, bills and contracts — uploaded directly from your device.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openDocModal()">+ Upload Document</button>
+      </div>
+      <div class="doc-layout">
+        <!-- Project Sidebar -->
+        <div class="doc-sidebar-card">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);">Projects</div>
+          <div id="docProjectList">
+            <div class="doc-proj-item active" data-proj="" onclick="filterDocsByProject('',this)">
+              <span class="doc-proj-dot"></span> All Documents
+            </div>
+          </div>
+        </div>
+        <!-- Doc Content -->
+        <div>
+          <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;">
+            <div class="tab-bar" style="margin-bottom:0;">
+              <button class="tab-btn active" onclick="filterDocsByType('all',this)">All</button>
+              <button class="tab-btn" onclick="filterDocsByType('bill',this)">Bills</button>
+              <button class="tab-btn" onclick="filterDocsByType('blueprint',this)">Blueprints</button>
+              <button class="tab-btn" onclick="filterDocsByType('permit',this)">Permits</button>
+              <button class="tab-btn" onclick="filterDocsByType('contract',this)">Contracts</button>
+              <button class="tab-btn" onclick="filterDocsByType('other',this)">Other</button>
+            </div>
+          </div>
+          <!-- Upload zone — click or drag & drop real files -->
+          <div class="doc-upload-zone" id="docDropZone" onclick="document.getElementById('docFileInput').click()">
+            <div style="font-size:2.5rem;margin-bottom:10px;">📂</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;">Drop files here or click to upload</div>
+            <div style="font-size:0.8rem;color:var(--text-3);">PDF, Images, Word, Excel — Max 10MB each · Stored securely in Firebase</div>
+            <input type="file" id="docFileInput" style="display:none;" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt,.zip">
+          </div>
+          <div id="docGrid" class="doc-grid" style="margin-top:18px;"></div>
+        </div>
+      </div>
+
+      <!-- Doc Modal — unified upload + link modal -->
+      <div id="docModal" class="modal">
+        <div class="modal-box" style="max-width:480px;">
+          <div class="modal-header">
+            <div><div class="modal-title">Save Document</div><div class="modal-subtitle">Tag this file with a project and document type.</div></div>
+            <button class="modal-close" onclick="closeModal('docModal')">&times;</button>
+          </div>
+          <form id="docForm">
+            <!-- File info (shown when uploading a file) -->
+            <div id="docFileInfo" style="display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-3);border:1px solid var(--gold-border);border-radius:var(--radius);margin-bottom:18px;">
+              <span style="font-size:1.4rem;">📄</span>
+              <div>
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);">File Ready to Upload</div>
+                <div id="docFileInfoText" style="font-size:0.85rem;color:var(--text-2);margin-top:2px;"></div>
+              </div>
+            </div>
+
+            <div class="form-group"><label class="form-label">Document Name *</label><input type="text" id="docName" class="form-control" placeholder="e.g. Ground Floor Blueprint" required></div>
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Type</label>
+                <select id="docType" class="form-control">
+                  <option value="bill">Bill / Invoice</option><option value="blueprint">Blueprint</option>
+                  <option value="permit">Permit</option><option value="contract">Contract</option><option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Project</label><select id="docProject" class="form-control"><option value="">General</option></select></div>
+            </div>
+
+            <!-- URL field (shown in link/manual mode) -->
+            <div id="docUrlGroup" class="form-group">
+              <label class="form-label">File URL / Link</label>
+              <input type="url" id="docUrl" class="form-control" placeholder="https://drive.google.com/...">
+            </div>
+
+            <div class="form-group"><label class="form-label">Notes</label><input type="text" id="docNotes" class="form-control" placeholder="Bill #, date, amount, etc."></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-ghost" onclick="closeModal('docModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary" style="min-width:140px;">Save Document</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 10. REPORTS ─── -->
+    <section id="reports" class="section">
+      <div class="section-header">
+        <div><h1 class="page-title">Reports</h1><p class="page-sub">Project summary, analytics, and workforce overview.</p></div>
+        <select id="reportProjectSelect" class="form-control" style="width:auto;" onchange="loadReports(this.value)"><option value="">All Projects</option></select>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:28px;">
+        <div class="stat-card gold"><div class="stat-label">Total Expense</div><div class="stat-value gold" id="rptExpense">₹—</div></div>
+        <div class="stat-card green"><div class="stat-label">Attendance Rate</div><div class="stat-value green" id="rptAttRate">—%</div></div>
+        <div class="stat-card blue"><div class="stat-label">Log Entries</div><div class="stat-value blue" id="rptLogs">—</div></div>
+        <div class="stat-card"><div class="stat-label">Open Issues</div><div class="stat-value" id="rptIssues">—</div></div>
+      </div>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <div class="analytics-card-title">Top Workers by Attendance</div>
+          <div id="rptWorkerList"></div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-card-title">Expense by Category</div>
+          <div id="rptExpCategoryList"></div>
+        </div>
+        <div class="analytics-card" style="grid-column:1/-1;">
+          <div class="analytics-card-title">Recent Issues</div>
+          <div id="rptIssueList"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ── PWA Install Banner ── -->
+<div id="installBanner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9998;background:var(--surface-2);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:14px 20px;box-shadow:0 12px 40px rgba(0,0,0,0.5);align-items:center;gap:14px;white-space:nowrap;">
+  <div style="font-size:1.4rem;">📲</div>
+  <div>
+    <div style="font-weight:700;font-size:0.9rem;">Install BuildTrack</div>
+    <div style="font-size:0.78rem;color:var(--text-2);">Add to your home screen for quick access</div>
+  </div>
+  <button class="btn btn-primary btn-sm" onclick="installApp()">Install</button>
+  <button class="btn btn-ghost btn-sm" onclick="dismissInstallBanner()">Later</button>
+</div>
+
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
