@@ -1,7 +1,10 @@
-// service-worker.js — BuildTrack PWA
-// Caches core assets for offline use; proxies Firebase calls to network.
+// service-worker.js — BuildTrack PWA v3
+// v3: JS files are never cached (always fresh) to prevent stale auth/data bugs
 
-const CACHE_NAME = 'buildtrack-v1';
+const CACHE_NAME = 'buildtrack-v3';
+
+// Only cache truly static assets (CSS, fonts, HTML shells)
+// JS files are intentionally excluded — they must always be fresh
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,45 +13,38 @@ const STATIC_ASSETS = [
   '/dashboard.html',
   '/css/style.css',
   '/css/dashboard.css',
-  '/js/firebase.js',
-  '/js/auth.js',
-  '/js/auth-guard.js',
-  '/js/dashboard.js',
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap',
 ];
 
-// ── Install: pre-cache static shell ────────────────────────
+// ── Install ────────────────────────────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Cache what we can; ignore failures (e.g. cross-origin fonts)
-      return Promise.allSettled(
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.allSettled(
         STATIC_ASSETS.map(url =>
           cache.add(url).catch(() => console.warn('[SW] Failed to cache:', url))
         )
-      );
-    })
+      )
+    )
   );
   self.skipWaiting();
 });
 
-// ── Activate: remove old caches ─────────────────────────────
+// ── Activate: delete ALL old caches ───────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      )
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
-// ── Fetch: network-first for Firebase/API, cache-first for assets ──
+// ── Fetch strategy ─────────────────────────────────────
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Always go to network for Firebase (Firestore, Auth, Storage)
+  // 1. Always network for Firebase
   if (
     url.hostname.includes('firebase') ||
     url.hostname.includes('firestore') ||
@@ -61,34 +57,40 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first for local static assets
+  // 2. Always network for JS files — never serve stale JS
+  if (url.pathname.endsWith('.js')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // 3. Cache-first for everything else (CSS, HTML, images)
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
-        // Cache successful GET responses
         if (response.ok && event.request.method === 'GET') {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
         return response;
       }).catch(() => {
-        // Offline fallback for HTML pages
         if (event.request.destination === 'document') {
-          return caches.match('/dashboard.html');
+          return caches.match('/login.html');
         }
       });
     })
   );
 });
 
-// ── Push Notifications (future use) ─────────────────────────
+// ── Push Notifications ─────────────────────────────────
 self.addEventListener('push', event => {
   if (!event.data) return;
   const data = event.data.json();
   self.registration.showNotification(data.title || 'BuildTrack', {
     body: data.body || '',
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-72.png',
+    icon: '/icons/maskable_icon_x192.png',
+    badge: '/icons/maskable_icon_x72.png',
   });
 });

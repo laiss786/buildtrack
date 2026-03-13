@@ -6,7 +6,8 @@
 import { auth } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // ── Helpers ──────────────────────────────────────────────────
@@ -36,6 +37,8 @@ window.login = async function () {
   setLoading(btn, true, "Access Dashboard");
 
   try {
+    // Sign out any existing session first — prevents old user data leaking
+    await signOut(auth);
     await signInWithEmailAndPassword(auth, email, password);
     window.location.href = "dashboard.html";
   } catch (err) {
@@ -65,6 +68,8 @@ window.register = async function () {
   setLoading(btn, true, "Register Account");
 
   try {
+    // Sign out any existing session first
+    await signOut(auth);
     await createUserWithEmailAndPassword(auth, email, password);
     alert("Account created! Please log in.");
     window.location.href = "login.html";

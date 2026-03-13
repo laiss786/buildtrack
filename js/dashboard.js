@@ -25,16 +25,42 @@ let _currentIssueFilter = "all";
 let _currentStorage = "all";
 let _currentExpCat  = "";
 let _currentUser    = null;
+let _uid            = null;
+
+// ═══════════════════════════════════════════════════════
+// USER-SCOPED COLLECTION HELPER
+// All data lives under /users/{uid}/{collection}
+// so each account has completely separate data.
+// ═══════════════════════════════════════════════════════
+function userCol(name) {
+  if (!_uid) throw new Error("User not authenticated");
+  return collection(db, "users", _uid, name);
+}
+
+function userDoc(name, id) {
+  if (!_uid) throw new Error("User not authenticated");
+  return doc(db, "users", _uid, name, id);
+}
 
 // ═══════════════════════════════════════════════════════
 // 0. AUTH GUARD
+// Init only runs AFTER Firebase confirms who the user is.
+// This prevents _uid being null when loadProjects() fires.
 // ═══════════════════════════════════════════════════════
 requireAuth((user) => {
   _currentUser = user;
+  _uid         = user.uid;
+
   const el = document.getElementById("userEmail");
   const av = document.getElementById("userInitial");
   if (el) el.innerText = user.email;
   if (av) av.innerText = user.email[0].toUpperCase();
+
+  // Boot the dashboard only after uid is confirmed
+  const ad = document.getElementById("attendanceDate");
+  if (ad && !ad.value) ad.value = new Date().toISOString().split("T")[0];
+
+  ensureProjects().then(() => loadProjects());
 });
 
 // ═══════════════════════════════════════════════════════
@@ -107,14 +133,14 @@ window.closeModal = id => { document.getElementById(id).style.display = "none"; 
 // ═══════════════════════════════════════════════════════
 async function ensureProjects() {
   if (_projects.length) return _projects;
-  const snap = await getDocs(query(collection(db, "projects"), orderBy("createdAt","desc")));
+  const snap = await getDocs(query(userCol("projects"), orderBy("createdAt","desc")));
   _projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   return _projects;
 }
 
 async function ensureLabourers() {
   if (_labourers.length) return _labourers;
-  const snap = await getDocs(collection(db, "labourers"));
+  const snap = await getDocs(userCol("labourers"));
   _labourers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   return _labourers;
 }
@@ -192,7 +218,7 @@ document.getElementById("projectForm")?.addEventListener("submit", async e => {
   const btn = document.getElementById("saveProjBtn");
   btn.disabled = true; btn.textContent = "Launching...";
   try {
-    await addDoc(collection(db, "projects"), {
+    await addDoc(userCol("projects"), {
       name: document.getElementById("projName").value.trim(),
       client: document.getElementById("projClient").value.trim(),
       startDate: document.getElementById("projStart").value,
@@ -210,12 +236,12 @@ document.getElementById("projectForm")?.addEventListener("submit", async e => {
 
 window.deleteProject = async id => {
   if (!confirm("Permanently delete this project and all its data?")) return;
-  await deleteDoc(doc(db, "projects", id)); _projects=[];
+  await deleteDoc(userDoc("projects", id)); _projects=[];
   toast("Project deleted.","error"); loadProjects();
 };
 window.toggleProjectStatus = async (id, cur) => {
   const next = cur==="active"?"finished":"active";
-  await updateDoc(doc(db,"projects",id),{status:next}); _projects=[];
+  await updateDoc(userDoc("projects",id),{status:next}); _projects=[];
   toast(`Project marked ${next}.`); loadProjects();
 };
 
@@ -239,7 +265,7 @@ async function loadDailyLogs(filter="") {
   if (!feed) return;
   feed.innerHTML = `<div class="empty-state"><div class="empty-sub">Loading...</div></div>`;
   try {
-    const ref = collection(db,"daily_logs");
+    const ref = userCol("daily_logs");
     const q = filter
       ? query(ref, where("project","==",filter), orderBy("date","desc"))
       : query(ref, orderBy("date","desc"), limit(60));
@@ -281,7 +307,7 @@ document.getElementById("logForm")?.addEventListener("submit", async e => {
   const btn = e.target.querySelector('button[type="submit"]');
   btn.disabled=true; btn.textContent="Posting...";
   try {
-    await addDoc(collection(db,"daily_logs"),{
+    await addDoc(userCol("daily_logs"),{
       project, date:document.getElementById("logDateInput").value,
       labourersPresent:parseInt(document.getElementById("labourCount").value)||0,
       description:document.getElementById("logDesc").value,
@@ -296,7 +322,7 @@ document.getElementById("logForm")?.addEventListener("submit", async e => {
 
 window.deleteLog = async id => {
   if (!confirm("Delete this entry?")) return;
-  await deleteDoc(doc(db,"daily_logs",id));
+  await deleteDoc(userDoc("daily_logs",id));
   document.getElementById(`log-${id}`)?.remove();
   toast("Entry deleted.","error");
 };
@@ -395,7 +421,7 @@ document.getElementById("labourerForm")?.addEventListener("submit", async e => {
   const btn = e.target.querySelector('button[type="submit"]');
   btn.disabled=true; btn.textContent="Saving...";
   try {
-    await addDoc(collection(db,"labourers"),{
+    await addDoc(userCol("labourers"),{
       name:    document.getElementById("labourerName").value.trim(),
       role:    document.getElementById("labourerRole").value.trim(),
       wagePerDay: Number(document.getElementById("labourerWage").value)||0,
@@ -415,7 +441,7 @@ document.getElementById("labourerForm")?.addEventListener("submit", async e => {
 
 window.deleteLabourer = async id => {
   if (!confirm("Remove this worker? Their attendance records will remain.")) return;
-  await deleteDoc(doc(db,"labourers",id)); _labourers=[];
+  await deleteDoc(userDoc("labourers",id)); _labourers=[];
   toast("Worker removed.","error"); await initLabourers();
 };
 
@@ -440,7 +466,7 @@ async function loadAttendanceTiles() {
     const date = document.getElementById("attendanceDate")?.value||"";
     let existing = {};
     if (date) {
-      const snap = await getDocs(query(collection(db,"attendance"), where("date","==",date)));
+      const snap = await getDocs(query(userCol("attendance"), where("date","==",date)));
       snap.forEach(d=>{ existing[d.data().labourerId]=d.data().status; });
     }
     const pf = document.getElementById("attendanceProjectFilter")?.value||"";
@@ -505,7 +531,7 @@ document.getElementById("saveAttendanceBtn")?.addEventListener("click", async ()
   try {
     const batch = writeBatch(db);
     tiles.forEach(tile=>{
-      const ref = doc(db,"attendance",`${tile.dataset.id}_${date}`);
+      const ref = doc(db, "users", _uid, "attendance", `${tile.dataset.id}_${date}`);
       batch.set(ref,{ labourerId:tile.dataset.id, date, status:tile.dataset.status, timestamp:serverTimestamp() });
     });
     await batch.commit();
@@ -522,7 +548,7 @@ window.loadAttHistory = async () => {
   box.innerHTML=`<div style="color:var(--text-3);padding:20px;">Loading...</div>`;
   try {
     const labs = await ensureLabourers();
-    const snap = await getDocs(query(collection(db,"attendance"),where("date","==",date)));
+    const snap = await getDocs(query(userCol("attendance"),where("date","==",date)));
     const rec = {}; snap.forEach(d=>{ rec[d.data().labourerId]=d.data().status; });
     const filtered = pf ? labs.filter(l=>l.projectName===pf) : labs;
     const present=filtered.filter(l=>rec[l.id]==="present");
@@ -578,7 +604,7 @@ window.calculatePayroll = async () => {
   try {
     const labs = await ensureLabourers();
     const filtered = pf ? labs.filter(l=>l.projectName===pf) : labs;
-    const snap = await getDocs(query(collection(db,"attendance"),
+    const snap = await getDocs(query(userCol("attendance"),
       where("date",">=",`${month}-01`), where("date","<=",`${month}-${String(daysInMonth).padStart(2,"0")}`)));
     const attMap = {};
     snap.forEach(d=>{ const a=d.data(); if(a.status==="present"){ attMap[a.labourerId]=(attMap[a.labourerId]||0)+1; } });
@@ -630,7 +656,7 @@ let _materials = [];
 
 async function loadMaterials() {
   try {
-    const snap = await getDocs(query(collection(db,"materials"), orderBy("createdAt","desc")));
+    const snap = await getDocs(query(userCol("materials"), orderBy("createdAt","desc")));
     _materials = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderMaterialsGrid();
     updateMaterialStats();
@@ -700,7 +726,7 @@ async function loadMaterialTxns() {
   const box = document.getElementById("materialTxnList");
   if (!box) return;
   try {
-    const snap = await getDocs(query(collection(db,"materialTxns"), orderBy("createdAt","desc"), limit(20)));
+    const snap = await getDocs(query(userCol("materialTxns"), orderBy("createdAt","desc"), limit(20)));
     if (snap.empty) { box.innerHTML=`<div style="color:var(--text-3);font-size:0.85rem;text-align:center;padding:20px;">No transactions yet.</div>`; return; }
     box.innerHTML="";
     snap.forEach(d=>{
@@ -733,9 +759,9 @@ document.getElementById("materialForm")?.addEventListener("submit", async e => {
     const loc = document.getElementById("matLocation").value;
     const existing = _materials.find(m=>m.name.toLowerCase()===name.toLowerCase()&&m.location===loc);
     if (existing) {
-      await updateDoc(doc(db,"materials",existing.id),{ quantity: (existing.quantity||0)+qty });
+      await updateDoc(userDoc("materials",existing.id),{ quantity: (existing.quantity||0)+qty });
     } else {
-      await addDoc(collection(db,"materials"),{
+      await addDoc(userCol("materials"),{
         name, category:document.getElementById("matCategory").value,
         quantity:qty, unit:document.getElementById("matUnit").value,
         location:loc, minStock:parseFloat(document.getElementById("matMinStock").value)||0,
@@ -745,7 +771,7 @@ document.getElementById("materialForm")?.addEventListener("submit", async e => {
         createdAt:serverTimestamp()
       });
     }
-    await addDoc(collection(db,"materialTxns"),{
+    await addDoc(userCol("materialTxns"),{
       materialName:name, type:"in", quantity:qty,
       unit:document.getElementById("matUnit").value,
       notes:document.getElementById("matNotes").value.trim(),
@@ -768,11 +794,11 @@ document.getElementById("transferForm")?.addEventListener("submit", async e => {
   if ((mat.quantity||0) < qty) return toast("Not enough stock.","error");
   const to = from==="shed"?"site":"shed";
   try {
-    await updateDoc(doc(db,"materials",matId),{ quantity:(mat.quantity||0)-qty, location:from });
+    await updateDoc(userDoc("materials",matId),{ quantity:(mat.quantity||0)-qty, location:from });
     const dest = _materials.find(m=>m.name.toLowerCase()===mat.name.toLowerCase()&&m.location===to);
-    if (dest) { await updateDoc(doc(db,"materials",dest.id),{quantity:(dest.quantity||0)+qty}); }
-    else { await addDoc(collection(db,"materials"),{...mat, id:undefined, location:to, quantity:qty, createdAt:serverTimestamp()}); }
-    await addDoc(collection(db,"materialTxns"),{
+    if (dest) { await updateDoc(userDoc("materials",dest.id),{quantity:(dest.quantity||0)+qty}); }
+    else { await addDoc(userCol("materials"),{...mat, id:undefined, location:to, quantity:qty, createdAt:serverTimestamp()}); }
+    await addDoc(userCol("materialTxns"),{
       materialName:mat.name, type:"transfer", quantity:qty, unit:mat.unit,
       notes:`${from} → ${to}`, date:new Date().toISOString().split("T")[0], createdAt:serverTimestamp()
     });
@@ -783,7 +809,7 @@ document.getElementById("transferForm")?.addEventListener("submit", async e => {
 
 window.deleteMaterial = async id => {
   if (!confirm("Remove this material?")) return;
-  await deleteDoc(doc(db,"materials",id)); _materials=[];
+  await deleteDoc(userDoc("materials",id)); _materials=[];
   toast("Removed.","error"); await loadMaterials();
 };
 
@@ -810,7 +836,7 @@ async function initExpenses() {
 
 async function loadExpenses() {
   try {
-    const snap = await getDocs(query(collection(db,"expenses"), orderBy("createdAt","desc"), limit(200)));
+    const snap = await getDocs(query(userCol("expenses"), orderBy("createdAt","desc"), limit(200)));
     _expenses = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderExpenseRows();
     updateExpenseStats();
@@ -863,7 +889,7 @@ document.getElementById("expenseForm")?.addEventListener("submit", async e => {
   const sel = document.getElementById("expProject");
   const projName = sel?.options[sel.selectedIndex]?.text||"General";
   try {
-    await addDoc(collection(db,"expenses"),{
+    await addDoc(userCol("expenses"),{
       description: document.getElementById("expDesc").value.trim(),
       amount:      parseFloat(document.getElementById("expAmount").value)||0,
       date:        document.getElementById("expDate").value,
@@ -883,7 +909,7 @@ document.getElementById("expenseForm")?.addEventListener("submit", async e => {
 
 window.deleteExpense = async id => {
   if (!confirm("Delete this expense?")) return;
-  await deleteDoc(doc(db,"expenses",id));
+  await deleteDoc(userDoc("expenses",id));
   _expenses = _expenses.filter(e=>e.id!==id);
   toast("Deleted.","error"); renderExpenseRows(); updateExpenseStats();
 };
@@ -904,7 +930,7 @@ async function initIssues() {
 
 async function loadIssues() {
   try {
-    const snap = await getDocs(query(collection(db,"issues"), orderBy("createdAt","desc")));
+    const snap = await getDocs(query(userCol("issues"), orderBy("createdAt","desc")));
     _issues = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderIssues();
     updateIssueStats();
@@ -962,7 +988,7 @@ document.getElementById("issueForm")?.addEventListener("submit", async e => {
   const sel = document.getElementById("issueProject");
   const projName = sel?.options[sel.selectedIndex]?.text||"";
   try {
-    await addDoc(collection(db,"issues"),{
+    await addDoc(userCol("issues"),{
       title:        document.getElementById("issueTitle").value.trim(),
       severity:     document.getElementById("issueSeverity").value,
       project:      sel?.value||"",
@@ -980,14 +1006,14 @@ document.getElementById("issueForm")?.addEventListener("submit", async e => {
 });
 
 window.resolveIssue = async id => {
-  await updateDoc(doc(db,"issues",id),{status:"resolved"});
+  await updateDoc(userDoc("issues",id),{status:"resolved"});
   _issues.find(i=>i.id===id)&&(_issues.find(i=>i.id===id).status="resolved");
   toast("Issue resolved!"); renderIssues(); updateIssueStats();
 };
 
 window.deleteIssue = async id => {
   if (!confirm("Delete this issue?")) return;
-  await deleteDoc(doc(db,"issues",id));
+  await deleteDoc(userDoc("issues",id));
   _issues=_issues.filter(i=>i.id!==id); toast("Deleted.","error");
   renderIssues(); updateIssueStats();
 };
@@ -1014,7 +1040,7 @@ async function initDocuments() {
 
 async function loadDocuments() {
   try {
-    const snap = await getDocs(query(collection(db,"documents"), orderBy("createdAt","desc")));
+    const snap = await getDocs(query(userCol("documents"), orderBy("createdAt","desc")));
     _docs = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderDocGrid();
   } catch(e){ console.error(e); }
@@ -1119,7 +1145,7 @@ document.getElementById("docForm")?.addEventListener("submit", async e => {
       if (!_currentUser) throw new Error("Not logged in.");
 
       const safeFileName = `${Date.now()}_${pendingFile.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
-      storagePath = `documents/${_currentUser.uid}/${safeFileName}`;
+      storagePath = `users/${_uid}/documents/${safeFileName}`;
       const sRef = storageRef(storage, storagePath);
 
       // Show progress
@@ -1149,7 +1175,7 @@ document.getElementById("docForm")?.addEventListener("submit", async e => {
       if (!downloadURL) throw new Error("Please enter a URL.");
     }
 
-    await addDoc(collection(db,"documents"),{
+    await addDoc(userCol("documents"),{
       name:        document.getElementById("docName").value.trim(),
       type:        document.getElementById("docType").value,
       project:     sel?.value||"",
@@ -1201,7 +1227,7 @@ window.deleteDoc = async (id, path) => {
       const sRef = storageRef(storage, path);
       await deleteObject(sRef).catch(()=>{}); // ignore if already gone
     }
-    await deleteDoc(doc(db,"documents",id));
+    await deleteDoc(userDoc("documents",id));
     _docs=_docs.filter(d=>d.id!==id);
     toast("Document removed.","error");
     renderDocGrid();
@@ -1228,21 +1254,21 @@ async function initReports() {
 
 window.loadReports = async (projFilter="") => {
   try {
-    const expSnap = await getDocs(query(collection(db,"expenses"), ...(projFilter?[where("projectName","==",projFilter)]:[])));
+    const expSnap = await getDocs(query(userCol("expenses"), ...(projFilter?[where("projectName","==",projFilter)]:[])));
     const exps = expSnap.docs.map(d=>d.data());
     const totalExp = exps.reduce((s,e)=>s+(e.amount||0),0);
     document.getElementById("rptExpense").innerText = fmt(totalExp);
 
     const d30 = new Date(); d30.setDate(d30.getDate()-30);
-    const attSnap = await getDocs(query(collection(db,"attendance"), where("date",">=",d30.toISOString().split("T")[0])));
+    const attSnap = await getDocs(query(userCol("attendance"), where("date",">=",d30.toISOString().split("T")[0])));
     const attRecords = attSnap.docs.map(d=>d.data());
     const pct = attRecords.length ? Math.round(attRecords.filter(a=>a.status==="present").length/attRecords.length*100) : 0;
     document.getElementById("rptAttRate").innerText = pct+"%";
 
-    const logSnap = await getDocs(collection(db,"daily_logs"));
+    const logSnap = await getDocs(userCol("daily_logs"));
     document.getElementById("rptLogs").innerText = logSnap.size;
 
-    const issueSnap = await getDocs(query(collection(db,"issues"), where("status","==","open")));
+    const issueSnap = await getDocs(query(userCol("issues"), where("status","==","open")));
     document.getElementById("rptIssues").innerText = issueSnap.size;
 
     const labs = await ensureLabourers();
@@ -1274,7 +1300,7 @@ window.loadReports = async (projFilter="") => {
         </div>`).join("") || `<div class="empty-state"><div class="empty-sub">No expense data.</div></div>`;
     }
 
-    const issAll = await getDocs(query(collection(db,"issues"), orderBy("createdAt","desc"), limit(5)));
+    const issAll = await getDocs(query(userCol("issues"), orderBy("createdAt","desc"), limit(5)));
     const il = document.getElementById("rptIssueList");
     if (il) {
       if (issAll.empty) { il.innerHTML=`<div class="empty-state"><div class="empty-sub">No issues logged.</div></div>`; }
@@ -1292,7 +1318,13 @@ window.loadReports = async (projFilter="") => {
 // ═══════════════════════════════════════════════════════
 document.getElementById("logoutBtn")?.addEventListener("click", async () => {
   if (!confirm("Logout of BuildTrack?")) return;
-  await signOut(auth); window.location.href="index.html";
+  // Clear all cached data before logout so next user starts clean
+  _projects  = [];
+  _labourers = [];
+  _uid       = null;
+  _currentUser = null;
+  await signOut(auth);
+  window.location.href = "index.html";
 });
 
 // ═══════════════════════════════════════════════════════
@@ -1338,11 +1370,6 @@ if ("serviceWorker" in navigator) {
 }
 
 // ═══════════════════════════════════════════════════════
-// 14. INIT
+// 14. INIT — moved into requireAuth above to prevent
+// _uid being null when Firestore is first queried.
 // ═══════════════════════════════════════════════════════
-document.addEventListener("DOMContentLoaded", async () => {
-  const ad = document.getElementById("attendanceDate");
-  if (ad) ad.value = new Date().toISOString().split("T")[0];
-  await ensureProjects();
-  await loadProjects();
-});
