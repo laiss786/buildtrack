@@ -324,3 +324,42 @@ body::before {
   .auth-brand   { display: none; }
   .auth-form-panel { padding: 40px 24px; }
 }
+
+/* ═══════════════════════════════════════════════
+   MOBILE AUTH PAGES
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  html, body { overflow-y: auto; height: auto; }
+
+  .auth-wrapper {
+    grid-template-columns: 1fr;
+    min-height: 100svh;
+  }
+
+  /* Hide decorative brand panel on mobile */
+  .auth-brand { display: none; }
+
+  .auth-form-panel {
+    padding: 40px 24px;
+    min-height: 100svh;
+    justify-content: center;
+  }
+
+  .auth-card { max-width: 100%; }
+
+  .auth-card-title { font-size: 2rem; }
+
+  /* Prevent iOS zoom on input focus */
+  .field-input { font-size: 16px; }
+
+  .auth-btn { padding: 15px; font-size: 0.92rem; }
+
+  /* Orbs smaller on mobile */
+  .orb-1 { width: 300px; height: 300px; }
+  .orb-2 { width: 250px; height: 250px; }
+}
+
+@media (max-width: 390px) {
+  .auth-form-panel { padding: 32px 18px; }
+  .auth-card-title { font-size: 1.8rem; }
+}
