@@ -262,14 +262,13 @@ Write the report with these exact sections:
 
 Keep the tone professional but readable. Use ₹ for currency. Format numbers in Indian style (lakhs/thousands). End with a one-line action plan for next week.`;
 
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
+  // Proxy via Cloudflare Worker to avoid CORS block on direct Anthropic calls.
+  // Replace CLOUDFLARE_WORKER_URL with your worker URL after setup.
+  const PROXY_URL = "https://old-sun-0c82.muhammedlais786.workers.dev";
+
+  const response = await fetch(PROXY_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": "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",
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-ipc": "true"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       model:      "claude-sonnet-4-5",
       max_tokens: 2000,
