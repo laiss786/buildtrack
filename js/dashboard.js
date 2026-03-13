@@ -1328,37 +1328,97 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 13. PWA — Install Prompt
+// 13. PWA — Install Popup (beautiful modal)
 // ═══════════════════════════════════════════════════════
 let _deferredInstallPrompt = null;
 
+const _isIOS    = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const _isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const _isInstalled = window.matchMedia('(display-mode: standalone)').matches
+                  || window.navigator.standalone === true;
+
+// Dismissed this session? Don't nag again
+let _installDismissed = sessionStorage.getItem('bt_install_dismissed') === '1';
+
+function openInstallPopup() {
+  if (_isInstalled || _installDismissed) return;
+  const popup = document.getElementById('installPopup');
+  if (!popup) return;
+
+  // Show correct CTA based on platform
+  if (_deferredInstallPrompt) {
+    document.getElementById('installPopupBtn').style.display = 'flex';
+  } else if (_isIOS && _isSafari) {
+    document.getElementById('installIosGuide').style.display = 'block';
+  } else {
+    document.getElementById('installOtherGuide').style.display = 'block';
+  }
+
+  popup.style.display = 'flex';
+  requestAnimationFrame(() => popup.classList.add('visible'));
+}
+
+function closeInstallPopup() {
+  const popup = document.getElementById('installPopup');
+  if (!popup) return;
+  popup.classList.remove('visible');
+  setTimeout(() => { popup.style.display = 'none'; }, 280);
+  _installDismissed = true;
+  sessionStorage.setItem('bt_install_dismissed', '1');
+}
+
+// Chrome/Edge/Android — capture native prompt
 window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
   _deferredInstallPrompt = e;
-  // Show install banner after 3 seconds
-  setTimeout(showInstallBanner, 3000);
+  // Show popup after 8 seconds (let user settle in first)
+  if (!_isInstalled && !_installDismissed) {
+    setTimeout(openInstallPopup, 8000);
+  }
 });
 
-function showInstallBanner() {
-  if (!_deferredInstallPrompt) return;
-  const banner = document.getElementById("installBanner");
-  if (banner) banner.style.display = "flex";
+// iOS Safari — show popup after 12 seconds
+if (_isIOS && _isSafari && !_isInstalled && !_installDismissed) {
+  setTimeout(openInstallPopup, 12000);
 }
 
+// Wire up popup buttons after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('installPopupBtn')?.addEventListener('click', async () => {
+    if (!_deferredInstallPrompt) return;
+    _deferredInstallPrompt.prompt();
+    const { outcome } = await _deferredInstallPrompt.userChoice;
+    _deferredInstallPrompt = null;
+    closeInstallPopup();
+    if (outcome === 'accepted') toast('BuildTrack installed! 🎉', 'success');
+  });
+
+  document.getElementById('installPopupClose')?.addEventListener('click', closeInstallPopup);
+  document.getElementById('installPopupLater')?.addEventListener('click', closeInstallPopup);
+
+  // Click outside to dismiss
+  document.getElementById('installPopup')?.addEventListener('click', function(e) {
+    if (e.target === this) closeInstallPopup();
+  });
+});
+
+// Keep old installApp global for any legacy calls
 window.installApp = async () => {
-  if (!_deferredInstallPrompt) return;
-  _deferredInstallPrompt.prompt();
-  const { outcome } = await _deferredInstallPrompt.userChoice;
-  if (outcome === "accepted") toast("BuildTrack installed! 🎉");
-  _deferredInstallPrompt = null;
-  const banner = document.getElementById("installBanner");
-  if (banner) banner.style.display = "none";
+  if (_deferredInstallPrompt) {
+    _deferredInstallPrompt.prompt();
+    const { outcome } = await _deferredInstallPrompt.userChoice;
+    _deferredInstallPrompt = null;
+    if (outcome === 'accepted') toast('BuildTrack installed! 🎉', 'success');
+  }
 };
 
-window.dismissInstallBanner = () => {
-  const banner = document.getElementById("installBanner");
-  if (banner) banner.style.display = "none";
-};
+window.dismissInstallBanner = closeInstallPopup;
+
+// Hide popup once installed
+window.addEventListener('appinstalled', () => {
+  closeInstallPopup();
+  toast('BuildTrack installed! Find it on your home screen 🎉', 'success');
+});
 
 // ── Register Service Worker ────────────────────────────
 if ("serviceWorker" in navigator) {

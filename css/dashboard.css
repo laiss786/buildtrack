@@ -1613,143 +1613,480 @@ select.form-control option { background: var(--surface-3); }
    Layout: Bottom nav bar replaces sidebar on mobile
 ═══════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   PWA INSTALL POPUP
+═══════════════════════════════════════════════════════════════ */
+.install-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.install-popup-overlay.visible {
+  opacity: 1;
+}
+
+.install-popup-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-top: 1px solid var(--gold-border);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 28px 24px 32px;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  transform: translateY(40px);
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+
+.install-popup-overlay.visible .install-popup-box {
+  transform: translateY(0);
+}
+
+/* Handle bar */
+.install-popup-box::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: var(--surface-4);
+  border-radius: 2px;
+  margin: -10px auto 22px;
+}
+
+.install-popup-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-3);
+  transition: all 0.2s;
+}
+.install-popup-close:hover { background: var(--surface-4); color: var(--text); }
+
+.install-popup-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 28px rgba(245,166,35,0.35);
+}
+
+.install-icon-inner {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: #0A0A0C;
+  letter-spacing: 1px;
+}
+
+.install-popup-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.install-popup-sub {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+.install-popup-features {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.install-feature {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-dim);
+  padding: 5px 10px;
+  border-radius: 100px;
+}
+
+.install-popup-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  background: var(--gold);
+  color: #0A0A0C;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+.install-popup-btn:hover {
+  background: var(--gold-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245,166,35,0.3);
+}
+
+/* iOS step guide */
+.install-ios-guide,
+.install-other-guide {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.ios-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+.ios-step:not(:last-child) { border-bottom: 1px solid var(--border); }
+
+.ios-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-border);
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ios-icon {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--surface-4);
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.install-popup-later {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-3);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.install-popup-later:hover { border-color: var(--border-hover); color: var(--text-2); }
+
+/* Desktop: center the popup */
+@media (min-width: 769px) {
+  .install-popup-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+  .install-popup-box {
+    border-radius: var(--radius-xl);
+    max-width: 420px;
+    transform: scale(0.95) translateY(10px);
+  }
+  .install-popup-overlay.visible .install-popup-box {
+    transform: scale(1) translateY(0);
+  }
+  .install-popup-box::before { display: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Full Overhaul
+   Mobile-first: sidebar hidden, bottom nav takes over
+═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables for safe areas ── */
+:root {
+  --bottom-nav-h: 62px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* ── BOTTOM NAV: hidden on desktop ── */
+.bottom-nav { display: none; }
+
+/* ═══════════════════════
+   TABLET + MOBILE ≤768px
+═══════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── SAFE AREA for notch/home indicator ── */
-  :root {
-    --bottom-nav-h: 64px;
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  /* ── BODY ── */
   body { overflow: hidden; }
 
-  /* ── HIDE DESKTOP SIDEBAR ── */
+  /* ── Hide desktop sidebar ── */
   .sidebar { display: none !important; }
 
-  /* ── MAIN fills full screen ── */
+  /* ── Main content: full width, pad bottom for nav bar ── */
   .main {
     margin-left: 0 !important;
     width: 100% !important;
     height: 100vh;
+    height: 100dvh;
     padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* ── TOPBAR ── */
+  /* ── Topbar ── */
   .topbar {
-    padding: 0 16px;
-    height: 56px;
+    padding: 0 14px;
+    height: 52px;
+  }
+  .topbar-title { font-size: 1.2rem; letter-spacing: 1px; }
+  .topbar-badge { display: none; } /* Hide "Firebase Live" badge to save space */
+
+  /* Add a compact status indicator instead */
+  .topbar-right::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    display: block;
+    animation: pulse 2.5s ease-in-out infinite;
   }
 
-  .topbar-title { font-size: 1.3rem; letter-spacing: 1.5px; }
+  /* ── Section padding ── */
+  .section { padding: 14px 12px 8px; }
 
-  .topbar-badge {
-    font-size: 0.72rem;
-    padding: 5px 10px 5px 7px;
-    gap: 6px;
-  }
+  /* ── Page header ── */
+  .page-title { font-size: 1.6rem; }
+  .page-sub { font-size: 0.82rem; }
 
-  /* ── SECTIONS ── */
-  .section { padding: 16px 14px 12px; }
-
-  /* ── PAGE HEADER ── */
-  .page-title { font-size: 1.7rem; }
   .section-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 18px;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
   }
-  .section-header .btn { width: 100%; justify-content: center; }
+  .section-header > div { flex: 1; }
+  .section-header .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+  }
 
-  /* ── STATS GRID — 2 cols on mobile ── */
+  /* ── Stats grid: 2 columns ── */
   .stats-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
-  .stat-value { font-size: 2rem; }
+  .stat-card { padding: 14px 16px; }
+  .stat-value { font-size: 1.8rem; }
+  .stat-label { font-size: 0.65rem; }
 
-  /* ── PROJECT CARDS — single column ── */
+  /* ── Project cards: single col ── */
   .projects-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
   }
-  .project-card { padding: 18px; }
+  .project-card { padding: 16px; }
+  .proj-name { font-size: 1.05rem; }
 
-  /* ── LOGS LAYOUT — stack vertically ── */
+  /* ── Daily logs: stack ── */
   .logs-layout {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
   .logs-form-sticky { position: static; }
-  .timeline { padding-left: 20px; }
 
-  /* ── ATTENDANCE GRID — 2 cols ── */
+  .timeline {
+    border-left-width: 1px;
+    padding-left: 16px;
+    margin-left: 6px;
+  }
+  .timeline-item::before {
+    left: -25px;
+    width: 12px;
+    height: 12px;
+    top: 16px;
+  }
+  .log-card { padding: 14px 16px; }
+  .log-meta { flex-wrap: wrap; gap: 10px; font-size: 0.72rem; }
+
+  /* ── Labourers: wage chips 2-col ── */
+  .wage-summary { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .wage-chip { padding: 12px 14px; }
+  .wage-chip-val { font-size: 1.5rem; }
+
+  /* ── Search + filter row ── */
+  [style*="display:flex;gap:12px;margin-bottom:16px"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* ── Attendance grid ── */
   .att-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 8px;
   }
-  .att-tile { padding: 14px 10px; gap: 7px; }
-  .att-tile .worker-initial { width: 36px; height: 36px; font-size: 0.9rem; }
-  .att-tile .worker-name { font-size: 0.78rem; }
-  .att-status-chip { font-size: 0.62rem; padding: 2px 8px; }
-
-  .att-action-row { flex-direction: column; }
+  .att-tile { padding: 12px 8px; gap: 6px; }
+  .att-tile .worker-initial { width: 34px; height: 34px; font-size: 0.85rem; }
+  .att-tile .worker-name { font-size: 0.76rem; }
+  .att-status-chip { font-size: 0.6rem; padding: 2px 7px; }
+  .att-action-row { flex-direction: column; gap: 8px; }
   .att-action-row .btn { width: 100%; justify-content: center; }
-
-  /* ── ATTENDANCE FILTERS ── */
-  .att-history-filters { flex-direction: column; align-items: stretch; }
-  .att-history-filters .form-control,
-  .att-history-filters select { width: 100%; }
-
-  /* ── MATERIALS — stack ── */
-  .material-layout { grid-template-columns: 1fr; gap: 14px; }
-
-  /* ── EXPENSE STATS — 2 cols ── */
-  .expense-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  /* ── EXPENSE ROW — simplified grid ── */
-  .expense-row {
-    grid-template-columns: 32px 1fr auto;
-    gap: 10px;
+  .att-history-filters { flex-direction: column; gap: 8px; }
+  .att-history-filters .form-control { width: 100%; }
+  .att-summary-chips {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    scrollbar-width: none;
+    padding-bottom: 4px;
   }
-  .expense-row > .expense-proj-tag { display: none; }
+  .att-summary-chips::-webkit-scrollbar { display: none; }
+  .summary-chip { flex-shrink: 0; }
+
+  /* ── Materials ── */
+  .material-layout { grid-template-columns: 1fr; gap: 12px; }
+  .storage-toggle { width: 100%; }
+  .storage-pill { flex: 1; text-align: center; }
+
+  /* ── Expense stats: 2×2 ── */
+  .expense-stats { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+
+  /* ── Expense rows: compact ── */
+  .expense-row {
+    grid-template-columns: 28px 1fr auto;
+    gap: 8px;
+    padding: 11px 12px;
+  }
+  /* hide project tag col + extra btn on small screens */
+  .expense-row > *:nth-child(4) { display: none; }
   .expense-row > .btn-icon:not(:last-child) { display: none; }
 
-  /* ── PAYROLL — scrollable table ── */
+  .expense-amount { font-size: 1.1rem; }
+
+  /* Expense category pills: horizontal scroll */
+  .expense-category-filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+  }
+  .expense-category-filter::-webkit-scrollbar { display: none; }
+  .cat-filter-btn { flex-shrink: 0; }
+
+  /* ── Payroll ── */
   .payroll-header,
   .payroll-row {
-    grid-template-columns: 1fr 70px 80px 90px;
+    grid-template-columns: 1fr 72px 88px 80px;
+    gap: 8px;
     font-size: 0.78rem;
   }
-  /* Hide less critical columns */
   .payroll-header > *:nth-child(3),
-  .payroll-row   > *:nth-child(3),
-  .payroll-header > *:nth-child(5),
-  .payroll-row   > *:nth-child(5) { display: none; }
+  .payroll-row   > *:nth-child(3) { display: none; }
+  .payroll-row { padding: 11px 12px; }
 
-  .payroll-row { padding: 12px 14px; }
+  /* ── Issues ── */
+  .issue-list { gap: 8px; }
+  .issue-card {
+    grid-template-columns: 4px 1fr auto;
+    gap: 8px;
+    padding: 12px 10px;
+  }
+  .issue-title { font-size: 0.85rem; }
+  .issue-meta { font-size: 0.7rem; }
+  .issue-status-badge { font-size: 0.62rem; padding: 3px 8px; }
 
-  /* ── DOCUMENTS — stack ── */
-  .doc-layout { grid-template-columns: 1fr; }
+  /* ── Documents ── */
+  .doc-layout { grid-template-columns: 1fr; gap: 12px; }
   .doc-sidebar-card { position: static; }
-  .doc-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .doc-card { padding: 14px; }
+  .doc-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .doc-card { padding: 12px; }
+  .doc-icon-wrap { width: 40px; height: 40px; font-size: 1.3rem; margin-bottom: 8px; }
+  .doc-name { font-size: 0.82rem; }
   .doc-upload-zone { padding: 24px 16px; }
 
-  /* ── ANALYTICS — stack ── */
-  .analytics-grid { grid-template-columns: 1fr; gap: 14px; }
+  /* ── Analytics / Reports ── */
+  .analytics-grid { grid-template-columns: 1fr; gap: 12px; }
+  /* Reports stats: 2×2 */
+  [id="reports"] .stats-grid,
+  [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
 
-  /* ── MODALS — full screen bottom sheet on mobile ── */
-  .modal { align-items: flex-end; padding: 0; }
+  /* ── Data tables: horizontal scroll ── */
+  .card > .table-scroll-wrap,
+  .table-scroll-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .data-table { min-width: 480px; }
+  .data-table thead th { padding: 9px 12px; font-size: 0.68rem; }
+  .data-table tbody td { padding: 10px 12px; font-size: 0.82rem; }
+
+  /* ── Modals → bottom sheet ── */
+  .modal {
+    align-items: flex-end;
+    padding: 0;
+  }
   .modal-box {
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     max-width: 100%;
-    max-height: 92vh;
-    padding: 24px 20px;
-    padding-bottom: calc(24px + var(--safe-bottom));
+    max-height: 93vh;
+    max-height: 93dvh;
+    padding: 20px 18px;
+    padding-bottom: calc(20px + var(--safe-bottom));
+    animation: sheetIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
   }
+  @keyframes sheetIn {
+    from { transform: translateY(40px); opacity: 0.6; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  /* Drag handle */
   .modal-box::before {
     content: '';
     display: block;
@@ -1757,88 +2094,66 @@ select.form-control option { background: var(--surface-3); }
     height: 4px;
     background: var(--surface-4);
     border-radius: 2px;
-    margin: -8px auto 20px;
+    margin: -4px auto 18px;
   }
-  .form-row.cols-2 { grid-template-columns: 1fr; }
-  .modal-footer { flex-direction: column-reverse; }
+  .modal-title { font-size: 1.4rem; }
+  .form-row.cols-2 { grid-template-columns: 1fr; gap: 0; }
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding-top: 16px;
+  }
   .modal-footer .btn { width: 100%; justify-content: center; }
 
-  /* ── TABS — scrollable ── */
+  /* ── Form controls: prevent iOS zoom ── */
+  .form-control,
+  .field-input {
+    font-size: 16px !important;
+  }
+  .form-section { padding: 12px; }
+  .form-group { margin-bottom: 14px; }
+
+  /* ── Tabs ── */
   .tab-bar {
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
   .tab-bar::-webkit-scrollbar { display: none; }
-  .tab-btn { padding: 8px 14px; font-size: 0.8rem; flex-shrink: 0; }
+  .tab-btn { padding: 7px 13px; font-size: 0.78rem; flex-shrink: 0; }
 
-  /* ── DATA TABLE — horizontal scroll ── */
-  .table-scroll-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: var(--radius);
-  }
-  .data-table { min-width: 500px; }
-  .data-table thead th,
-  .data-table tbody td { padding: 10px 12px; font-size: 0.82rem; }
-
-  /* ── TOAST — bottom left ── */
+  /* ── Toast: stays above bottom nav ── */
   .toast-container {
-    bottom: calc(var(--bottom-nav-h) + 12px + var(--safe-bottom));
-    right: 12px;
-    left: 12px;
+    bottom: calc(var(--bottom-nav-h) + 10px + var(--safe-bottom));
+    right: 10px;
+    left: 10px;
+    align-items: center;
   }
-  .toast { min-width: unset; max-width: 100%; font-size: 0.82rem; }
+  .toast { min-width: unset; max-width: 100%; font-size: 0.82rem; width: 100%; }
 
-  /* ── WAGE CHIPS ── */
-  .wage-summary { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .wage-chip-val { font-size: 1.5rem; }
-
-  /* ── CATEGORY FILTER PILLS — scrollable row ── */
-  .expense-category-filter {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-  }
-  .expense-category-filter::-webkit-scrollbar { display: none; }
-  .cat-filter-btn { flex-shrink: 0; }
-
-  /* ── SUMMARY CHIPS ── */
-  .att-summary-chips { flex-wrap: nowrap; overflow-x: auto; }
-
-  /* ── ISSUE CARDS ── */
-  .issue-card { grid-template-columns: 4px 1fr auto; gap: 10px; padding: 12px; }
-  .issue-title { font-size: 0.85rem; }
-
-  /* ── STORAGE TOGGLE ── */
-  .storage-toggle { width: 100%; justify-content: center; }
-  .storage-pill { flex: 1; text-align: center; }
-
-  /* ── FORM CONTROLS ── */
-  .form-control { font-size: 16px; } /* Prevents iOS zoom on focus */
-  .form-section { padding: 14px; }
+  /* ── Install popup: already bottom-sheet by default ── */
 
 }
 
-/* ── BOTTOM NAVIGATION BAR ─────────────────────────── */
+/* ═══════════════════════════════
+   BOTTOM NAVIGATION BAR
+═══════════════════════════════ */
 @media (max-width: 768px) {
-
   .bottom-nav {
     display: flex !important;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(var(--bottom-nav-h) + var(--safe-bottom));
-    padding-bottom: var(--safe-bottom);
-    background: var(--surface);
+    z-index: 300;
+    background: rgba(17,17,20,0.95);
     border-top: 1px solid var(--border);
-    z-index: 200;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* iOS safe area */
+    padding-bottom: var(--safe-bottom);
+    height: calc(var(--bottom-nav-h) + var(--safe-bottom));
   }
 
   .bottom-nav-inner {
@@ -1846,6 +2161,7 @@ select.form-control option { background: var(--surface-3); }
     width: 100%;
     align-items: stretch;
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -1858,19 +2174,20 @@ select.form-control option { background: var(--surface-3); }
     justify-content: center;
     gap: 3px;
     flex: 1;
-    min-width: 52px;
-    padding: 6px 4px;
-    cursor: pointer;
+    min-width: 50px;
+    padding: 5px 3px;
     border: none;
     background: transparent;
     color: var(--text-3);
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
-    transition: color 0.2s;
+    cursor: pointer;
+    transition: color 0.18s;
     -webkit-tap-highlight-color: transparent;
+    position: relative;
   }
 
   .bottom-nav-item svg {
@@ -1878,46 +2195,70 @@ select.form-control option { background: var(--surface-3); }
     height: 20px;
     stroke: currentColor;
     fill: none;
-    stroke-width: 1.8;
+    stroke-width: 1.7;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transition: transform 0.18s;
   }
 
   .bottom-nav-item.active {
     color: var(--gold);
   }
-
   .bottom-nav-item.active svg {
-    filter: drop-shadow(0 0 6px rgba(245,166,35,0.5));
+    transform: translateY(-1px);
+    filter: drop-shadow(0 0 5px rgba(245,166,35,0.55));
+  }
+
+  /* Gold dot indicator above active icon */
+  .bottom-nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
   }
 
   .bottom-nav-item span { line-height: 1; }
+
+  /* Tap feedback */
+  .bottom-nav-item:active svg { transform: scale(0.85); }
 }
 
-/* ── DESKTOP: hide bottom nav ── */
+/* ═════════════════════════
+   SMALL PHONES ≤390px
+═════════════════════════ */
+@media (max-width: 390px) {
+  .section { padding: 10px 10px 8px; }
+  .topbar { padding: 0 10px; height: 48px; }
+  .topbar-title { font-size: 1.1rem; }
+
+  .page-title { font-size: 1.4rem; }
+  .stat-value { font-size: 1.6rem; }
+  .stat-card  { padding: 12px; }
+
+  .wage-chip { padding: 10px 12px; }
+  .wage-chip-val { font-size: 1.3rem; }
+
+  .att-tile .worker-initial { width: 30px; height: 30px; font-size: 0.8rem; }
+  .att-tile .worker-name { font-size: 0.7rem; }
+  .att-status-chip { font-size: 0.55rem; }
+
+  .modal-box { padding: 16px 14px; }
+  .modal-title { font-size: 1.3rem; }
+
+  .bottom-nav-item { min-width: 44px; font-size: 0.5rem; }
+  .bottom-nav-item svg { width: 18px; height: 18px; }
+
+  .doc-grid { grid-template-columns: repeat(2,1fr); }
+}
+
+/* ═════════════════════════
+   DESKTOP: bottom nav off
+═════════════════════════ */
 @media (min-width: 769px) {
   .bottom-nav { display: none !important; }
-}
-
-/* ── SMALL PHONES (≤ 390px) ── */
-@media (max-width: 390px) {
-
-  .section { padding: 12px 10px; }
-  .topbar { padding: 0 12px; }
-  .topbar-title { font-size: 1.15rem; }
-
-  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .stat-value { font-size: 1.7rem; }
-  .stat-card  { padding: 16px; }
-
-  .att-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
-  .att-tile { padding: 12px 8px; }
-
-  .doc-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
-
-  .modal-box { padding: 20px 16px; max-height: 95vh; }
-  .page-title { font-size: 1.5rem; }
-
-  .bottom-nav-item { min-width: 44px; font-size: 0.53rem; }
-  .bottom-nav-item svg { width: 18px; height: 18px; }
 }

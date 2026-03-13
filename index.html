@@ -10,70 +10,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/maskable_icon_x192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/maskable_icon_x192.png">
-  <style>
-    #installBtn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      margin-top: 12px;
-      padding: 13px 18px;
-      background: transparent;
-      border: 1px solid rgba(245,166,35,0.35);
-      border-radius: 12px;
-      color: #F5A623;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      transition: all 0.2s;
-    }
-    #installBtn:hover {
-      background: rgba(245,166,35,0.08);
-      border-color: rgba(245,166,35,0.6);
-      box-shadow: 0 0 16px rgba(245,166,35,0.12);
-      transform: translateY(-1px);
-    }
-    #installBtn svg { flex-shrink: 0; }
-
-    /* Manual install tooltip for iOS/Firefox */
-    #installToast {
-      display: none;
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1C1C1F;
-      border: 1px solid rgba(245,166,35,0.35);
-      border-radius: 14px;
-      padding: 16px 22px;
-      color: #F0EDE8;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      max-width: 320px;
-      width: 90%;
-      text-align: center;
-      z-index: 9999;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      animation: toastUp 0.3s ease;
-    }
-    #installToast strong { color: #F5A623; }
-    #installToast .close-toast {
-      display: block;
-      margin-top: 12px;
-      color: #7A7872;
-      font-size: 0.78rem;
-      cursor: pointer;
-    }
-    #installToast .close-toast:hover { color: #F5A623; }
-    @keyframes toastUp {
-      from { opacity:0; transform: translateX(-50%) translateY(12px); }
-      to   { opacity:1; transform: translateX(-50%) translateY(0); }
-    }
-  </style>
 </head>
 <body>
   <div class="orb orb-1"></div>
@@ -116,86 +52,117 @@
           Create New Account
         </a>
 
-        <!-- PWA Install Button -->
-        <button id="installBtn" onclick="installApp()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="3"/>
-            <path d="M12 8v8M8 13l4 4 4-4"/>
-          </svg>
-          Add to Desktop
-        </button>
-
-        <!-- Install instructions toast (iOS / unsupported browsers) -->
-        <div id="installToast">
-          <strong>Install BuildTrack</strong><br>
-          On iPhone: tap the <strong>Share</strong> button then <strong>"Add to Home Screen"</strong><br>
-          On Android: tap <strong>⋮ Menu → Add to Home Screen</strong><br>
-          On Desktop: click the <strong>⊕ icon</strong> in your browser address bar
-          <span class="close-toast" onclick="closeInstallToast()">✕ Dismiss</span>
-        </div>
-
         <p style="text-align:center;color:var(--text-muted);font-size:0.78rem;margin-top:28px;">
           &copy; 2026 BuildTrack Systems Inc. &nbsp;·&nbsp; Enterprise Edition
         </p>
       </div>
     </div>
   </div>
+
+  <style>
+  :root { --gold:#F5A623; --gold-hover:#f0b83a; --gold-border:rgba(245,166,35,0.3); --gold-dim:rgba(245,166,35,0.12); --surface-2:#1C1C1F; --surface-3:#252528; --surface-4:#2C2C32; --border:rgba(255,255,255,0.07); --text:#F0EDE8; --text-2:#A09D99; --radius:14px; --radius-xl:28px; --success:#00C48C; --success-dim:rgba(0,196,140,0.1); }
+  .install-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9999;display:none;align-items:flex-end;justify-content:center;padding:0;opacity:0;transition:opacity .28s ease;}
+  .install-popup-overlay.visible{opacity:1;}
+  .install-popup-box{background:var(--surface-2);border:1px solid var(--border);border-top:1px solid var(--gold-border);border-radius:28px 28px 0 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;position:relative;transform:translateY(40px);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+  .install-popup-overlay.visible .install-popup-box{transform:translateY(0);}
+  .install-popup-box::before{content:'';display:block;width:40px;height:4px;background:var(--surface-4);border-radius:2px;margin:-10px auto 22px;}
+  .install-popup-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-2);}
+  .install-popup-icon{width:72px;height:72px;border-radius:18px;background:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 8px 28px rgba(245,166,35,.35);}
+  .install-icon-inner{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#0A0A0C;letter-spacing:1px;}
+  .install-popup-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--text);margin-bottom:8px;}
+  .install-popup-sub{font-size:.88rem;color:var(--text-2);line-height:1.55;margin-bottom:20px;}
+  .install-popup-features{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+  .install-feature{display:flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;color:var(--success);background:var(--success-dim);padding:5px 10px;border-radius:100px;}
+  .install-popup-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:var(--gold);color:#0A0A0C;border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .2s;}
+  .install-popup-btn:hover{background:var(--gold-hover);transform:translateY(-1px);}
+  .install-ios-guide,.install-other-guide{background:var(--surface-3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+  .ios-step{display:flex;align-items:flex-start;gap:12px;padding:8px 0;font-size:.85rem;color:var(--text-2);line-height:1.5;}
+  .ios-step:not(:last-child){border-bottom:1px solid var(--border);}
+  .ios-step-num{width:24px;height:24px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ios-icon{display:inline-block;padding:2px 6px;background:var(--surface-4);border-radius:4px;}
+  .install-popup-later{display:block;width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;}
+  @media(min-width:769px){.install-popup-overlay{align-items:center;padding:20px;}.install-popup-box{border-radius:28px;max-width:420px;transform:scale(.95) translateY(10px);}.install-popup-overlay.visible .install-popup-box{transform:scale(1) translateY(0);}.install-popup-box::before{display:none;}}
+  </style>
+<!-- ── PWA Install Popup ── -->
+<div id="installPopup" class="install-popup-overlay" style="display:none;">
+  <div class="install-popup-box">
+    <div class="install-popup-close" id="installPopupClose">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+    <div class="install-popup-icon">
+      <div class="install-icon-inner">BT</div>
+    </div>
+    <div class="install-popup-title">Install BuildTrack</div>
+    <div class="install-popup-sub">Get instant one-tap access — works offline on your home screen.</div>
+    <div class="install-popup-features">
+      <div class="install-feature"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Works offline</div>
+      <div class="install-feature"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>No app store</div>
+      <div class="install-feature"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Instant launch</div>
+    </div>
+    <button class="install-popup-btn" id="installPopupBtn" style="display:none;">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Add to Home Screen
+    </button>
+    <div class="install-ios-guide" id="installIosGuide" style="display:none;">
+      <div class="ios-step"><div class="ios-step-num">1</div><div>Tap the <strong>Share</strong> button <span class="ios-icon">⎙</span> at the bottom of Safari</div></div>
+      <div class="ios-step"><div class="ios-step-num">2</div><div>Scroll and tap <strong>"Add to Home Screen"</strong></div></div>
+      <div class="ios-step"><div class="ios-step-num">3</div><div>Tap <strong>"Add"</strong> — BuildTrack appears on your home screen</div></div>
+    </div>
+    <div class="install-other-guide" id="installOtherGuide" style="display:none;">
+      <div class="ios-step"><div class="ios-step-num">⊕</div><div>Click the <strong>install icon</strong> in your browser address bar, then <strong>"Install"</strong></div></div>
+    </div>
+    <button class="install-popup-later" id="installPopupLater">Maybe later</button>
+  </div>
+</div>
   <script>
-    let _installPrompt = null;
+  (function(){
+    var _prompt=null;
+    var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isSafari=/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    var installed=window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone===true;
+    var dismissed=sessionStorage.getItem('bt_install_dismissed')==='1';
 
-    // Detect platform
-    const isIOS     = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isSafari  = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const isAndroid = /android/i.test(navigator.userAgent);
-
-    // Check if already installed
-    const isInstalled = window.matchMedia('(display-mode: standalone)').matches
-                     || window.navigator.standalone === true;
-
-    function showInstallBtn() {
-      const btn = document.getElementById("installBtn");
-      if (btn) btn.style.display = "flex";
+    function open(){
+      if(installed||dismissed)return;
+      var p=document.getElementById('installPopup');
+      if(!p)return;
+      if(_prompt){document.getElementById('installPopupBtn').style.display='flex';}
+      else if(isIOS&&isSafari){document.getElementById('installIosGuide').style.display='block';}
+      else{document.getElementById('installOtherGuide').style.display='block';}
+      p.style.display='flex';
+      requestAnimationFrame(function(){p.classList.add('visible');});
     }
 
-    function hideInstallBtn() {
-      const btn = document.getElementById("installBtn");
-      if (btn) btn.style.display = "none";
+    function close(){
+      var p=document.getElementById('installPopup');
+      if(!p)return;
+      p.classList.remove('visible');
+      setTimeout(function(){p.style.display='none';},280);
+      dismissed=true;
+      sessionStorage.setItem('bt_install_dismissed','1');
     }
 
-    // Chrome/Edge on desktop and Android — native prompt
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      _installPrompt = e;
-      if (!isInstalled) showInstallBtn();
+    window.addEventListener('beforeinstallprompt',function(e){
+      e.preventDefault();_prompt=e;
+      if(!installed&&!dismissed)setTimeout(open,5000);
     });
 
-    // iOS Safari — show manual instructions
-    if (isIOS && isSafari && !isInstalled) {
-      showInstallBtn();
-    }
+    if(isIOS&&isSafari&&!installed&&!dismissed)setTimeout(open,8000);
 
-    window.installApp = async () => {
-      if (_installPrompt) {
-        // Chrome/Edge native install
-        _installPrompt.prompt();
-        const { outcome } = await _installPrompt.userChoice;
-        if (outcome === "accepted") hideInstallBtn();
-        _installPrompt = null;
-      } else if (isIOS && isSafari) {
-        // iOS manual instruction toast
-        document.getElementById("installToast").style.display = "block";
-      } else {
-        // Other browsers — show generic instructions toast
-        document.getElementById("installToast").style.display = "block";
-      }
-    };
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('installPopupBtn')?.addEventListener('click',async function(){
+        if(!_prompt)return;
+        _prompt.prompt();
+        var r=await _prompt.userChoice;
+        _prompt=null;close();
+      });
+      document.getElementById('installPopupClose')?.addEventListener('click',close);
+      document.getElementById('installPopupLater')?.addEventListener('click',close);
+      document.getElementById('installPopup')?.addEventListener('click',function(e){if(e.target===this)close();});
+    });
 
-    function closeInstallToast() {
-      document.getElementById("installToast").style.display = "none";
-    }
-
-    // Hide button once installed
-    window.addEventListener("appinstalled", hideInstallBtn);
+    window.addEventListener('appinstalled',close);
+  })();
   </script>
 </body>
 </html>
