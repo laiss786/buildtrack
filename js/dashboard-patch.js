@@ -11,7 +11,7 @@
 
 import { initOfflineSync, isOnline, queueOfflineWrite, refreshPendingBadge } from "./offline-sync.js";
 import { db } from "./firebase.js";
-import { injectAIReportUI, populateAIReportProjects } from "./ai-report.js";
+import { injectWeeklyReportUI, populateWeeklyReportProjects } from "./reports.js";
 
 // ── Wait for dashboard.js auth to complete, then init ─────────
 // dashboard.js sets window._uid inside requireAuth callback.
@@ -48,8 +48,8 @@ waitForUID((uid) => {
     wireOfflinePatches();
   }
 
-  // ── PATCH 3: Wire AI Report to Reports nav ────────────────
-  wireAIReport();
+  // ── PATCH 3: Wire Weekly Report to Reports nav ────────────
+  wireWeeklyReport();
 });
 
 // ═══════════════════════════════════════════════════════
@@ -199,20 +199,18 @@ function patchAttendanceSave() {
 }
 
 // ═══════════════════════════════════════════════════════
-// PATCH 3: AI Report — inject UI when Reports tab opens
+// PATCH 3: Weekly Report — inject UI when Reports tab opens
 // ═══════════════════════════════════════════════════════
 
-function wireAIReport() {
-  // Hook every nav item with data-section="reports"
-  // Use event delegation on document so it works even if items
-  // are added dynamically (bottom nav + sidebar both covered)
+function wireWeeklyReport() {
+  // Use event delegation so both sidebar and bottom nav are covered
   document.addEventListener("click", (e) => {
     const item = e.target.closest("[data-section='reports'], .nav-item[onclick*='reports'], .bottom-nav-item[data-section='reports']");
     if (!item) return;
 
     setTimeout(() => {
-      injectAIReportUI();
-      loadAIReportProjects();
+      injectWeeklyReportUI();
+      loadWeeklyReportProjects();
     }, 120);
   });
 
@@ -221,26 +219,25 @@ function wireAIReport() {
     const reportsSection = document.getElementById("reports");
     if (reportsSection && !reportsSection.classList.contains("hidden") &&
         reportsSection.style.display !== "none") {
-      injectAIReportUI();
-      loadAIReportProjects();
+      injectWeeklyReportUI();
+      loadWeeklyReportProjects();
     }
   }, 800);
 }
 
-function loadAIReportProjects() {
+function loadWeeklyReportProjects() {
   const projects = window._projects;
   if (projects?.length) {
-    populateAIReportProjects(projects);
+    populateWeeklyReportProjects(projects);
   } else {
-    // Wait for projects to be fetched by dashboard.js
     let attempts = 0;
     const poll = setInterval(() => {
       const p = window._projects;
       if (p?.length) {
         clearInterval(poll);
-        populateAIReportProjects(p);
+        populateWeeklyReportProjects(p);
       } else if (++attempts > 20) {
-        clearInterval(poll); // give up after 10s
+        clearInterval(poll);
       }
     }, 500);
   }

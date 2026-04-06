@@ -652,35 +652,35 @@
 <!-- ── MOBILE BOTTOM NAV ── -->
 <nav class="bottom-nav" id="bottomNav">
   <div class="bottom-nav-inner">
-    <button class="bottom-nav-item active" data-section="projects" onclick="window.showSection&&window.showSection('projects',this)">
+    <button class="bottom-nav-item active" data-section="projects">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Projects</span>
     </button>
-    <button class="bottom-nav-item" data-section="journal" onclick="window.showSection&&window.showSection('journal',this)">
+    <button class="bottom-nav-item" data-section="dailyLogs">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <span>Journal</span>
     </button>
-    <button class="bottom-nav-item" data-section="attendance" onclick="window.showSection&&window.showSection('attendance',this)">
+    <button class="bottom-nav-item" data-section="attendance">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>Attend</span>
     </button>
-    <button class="bottom-nav-item" data-section="expenses" onclick="window.showSection&&window.showSection('expenses',this)">
+    <button class="bottom-nav-item" data-section="expenses">
       <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       <span>Expense</span>
     </button>
-    <button class="bottom-nav-item" data-section="issues" onclick="window.showSection&&window.showSection('issues',this)">
+    <button class="bottom-nav-item" data-section="issues">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>Issues</span>
     </button>
-    <button class="bottom-nav-item" data-section="materials" onclick="window.showSection&&window.showSection('materials',this)">
+    <button class="bottom-nav-item" data-section="materials">
       <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       <span>Materials</span>
     </button>
-    <button class="bottom-nav-item" data-section="documents" onclick="window.showSection&&window.showSection('documents',this)">
+    <button class="bottom-nav-item" data-section="documents">
       <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
       <span>Docs</span>
     </button>
-    <button class="bottom-nav-item" data-section="reports" onclick="window.showSection&&window.showSection('reports',this)">
+    <button class="bottom-nav-item" data-section="reports">
       <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       <span>Reports</span>
     </button>
@@ -688,27 +688,63 @@
 </nav>
 
 <script>
-// Sync bottom nav with sidebar section switching
+// Mobile bottom nav — wire up to the same navigation logic as the sidebar
 (function() {
-  // Override showSection to also update bottom nav
-  const _origShow = window.showSection;
-  window.showSection = function(id, el) {
-    if (_origShow) _origShow(id, el);
-    // Update bottom nav active state
+  const NAV_TITLES = {
+    projects:"PROJECTS", dailyLogs:"SITE JOURNAL", labourers:"LABOURERS",
+    attendance:"ATTENDANCE", payroll:"PAYROLL", materials:"MATERIALS & INVENTORY",
+    expenses:"EXPENSES", issues:"SITE ISSUES", documents:"DOCUMENT VAULT", reports:"REPORTS",
+  };
+
+  const INIT_FNS = {
+    projects:   () => typeof loadProjects   === 'function' && loadProjects(),
+    dailyLogs:  () => typeof initDailyLogs  === 'function' && initDailyLogs(),
+    labourers:  () => typeof initLabourers  === 'function' && initLabourers(),
+    attendance: () => typeof initAttendance === 'function' && initAttendance(),
+    payroll:    () => typeof initPayroll    === 'function' && initPayroll(),
+    materials:  () => typeof initMaterials  === 'function' && initMaterials(),
+    expenses:   () => typeof initExpenses   === 'function' && initExpenses(),
+    issues:     () => typeof initIssues     === 'function' && initIssues(),
+    documents:  () => typeof initDocuments  === 'function' && initDocuments(),
+    reports:    () => typeof initReports    === 'function' && initReports(),
+  };
+
+  function activateSection(id) {
+    // Update sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+
+    // Update sidebar nav
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.toggle('active', n.dataset.section === id);
+    });
+
+    // Update bottom nav
     document.querySelectorAll('.bottom-nav-item').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.section === id);
     });
-  };
 
-  // Also listen for sidebar nav clicks to sync bottom nav
+    // Update topbar title
+    const tb = document.getElementById('topbarTitle');
+    if (tb) tb.textContent = NAV_TITLES[id] || id.toUpperCase();
+
+    // Run section initialiser
+    if (INIT_FNS[id]) INIT_FNS[id]();
+  }
+
+  // Wire bottom nav buttons
+  document.querySelectorAll('.bottom-nav-item').forEach(btn => {
+    btn.addEventListener('click', () => activateSection(btn.dataset.section));
+  });
+
+  // Also sync sidebar nav clicks → bottom nav active state
   document.querySelectorAll('.nav-item[data-section]').forEach(item => {
     item.addEventListener('click', () => {
-      const id = item.dataset.section || item.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-      if (id) {
-        document.querySelectorAll('.bottom-nav-item').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.section === id);
-        });
-      }
+      const id = item.dataset.section;
+      document.querySelectorAll('.bottom-nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.section === id);
+      });
     });
   });
 })();
