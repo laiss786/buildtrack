@@ -1,13 +1,17 @@
 // functions/index.js — BuildTrack AI Proxy
 // Proxies requests to Anthropic API server-side to avoid CORS.
+// Set the key once with: firebase functions:secrets:set ANTHROPIC_API_KEY
 // Deploy with: firebase deploy --only functions
 
 const functions = require("firebase-functions");
 const fetch     = (...args) => import("node-fetch").then(({default: f}) => f(...args));
 
-const ANTHROPIC_API_KEY = "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";
+exports.claudeProxy = functions
+  .runWith({ secrets: ["ANTHROPIC_API_KEY"] })
+  .https.onRequest(async (req, res) => {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-exports.claudeProxy = functions.https.onRequest(async (req, res) => {
+
   // CORS headers — allow only your Firebase domain
   res.set("Access-Control-Allow-Origin", "https://buildtrack001.web.app");
   res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
