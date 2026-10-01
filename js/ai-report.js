@@ -412,8 +412,8 @@ function injectAIReportStyles() {
     #aiReportPanel { margin-bottom: 28px; }
 
     .ai-report-card {
-      background: var(--surface-2, #1C1C1F);
-      border: 1px solid rgba(245,166,35,0.2);
+      background: var(--surface-2, #FFFFFF);
+      border: 1px solid rgba(20,23,28,0.1);
       border-radius: 20px;
       overflow: hidden;
     }
@@ -423,21 +423,21 @@ function injectAIReportStyles() {
     .ai-report-title-row { margin-bottom: 22px; }
     .ai-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(245,166,35,0.1);
-      border: 1px solid rgba(245,166,35,0.3);
-      color: #F5A623;
+      background: rgba(20,23,28,0.05);
+      border: 1px solid rgba(20,23,28,0.15);
+      color: var(--ink);
       font-size: 0.72rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
       padding: 5px 12px; border-radius: 100px;
       margin-bottom: 12px;
     }
     .ai-report-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 1px;
-      color: var(--text, #F0EDE8);
+      font-family: var(--font); font-weight: 600;
+      font-size: 1.3rem; letter-spacing: -0.01em;
+      color: var(--text, #14171C);
       margin-bottom: 6px;
     }
-    .ai-report-sub { color: var(--text-muted, #7A7872); font-size: 0.85rem; }
+    .ai-report-sub { color: var(--text-muted, #6E7480); font-size: 0.85rem; }
 
     .ai-report-controls { padding-bottom: 22px; }
     .ai-control-row { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -446,15 +446,15 @@ function injectAIReportStyles() {
     .ai-generate-btn {
       display: flex; align-items: center; gap: 10px;
       width: 100%; padding: 15px 20px;
-      background: linear-gradient(135deg, #F5A623 0%, #f0b83a 100%);
-      color: #0A0A0C; border: none; border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
+      background: var(--ink);
+      color: #FFFFFF; border: none; border-radius: 8px;
+      font-family: var(--font);
       font-size: 0.95rem; font-weight: 700;
       cursor: pointer; justify-content: center;
       transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(245,166,35,0.25);
+      box-shadow: none;
     }
-    .ai-generate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(245,166,35,0.4); }
+    .ai-generate-btn:hover { background: var(--ink-hover); }
     .ai-generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .ai-loading-box {
@@ -464,8 +464,8 @@ function injectAIReportStyles() {
     }
     .ai-spinner {
       width: 40px; height: 40px;
-      border: 3px solid rgba(245,166,35,0.15);
-      border-top-color: #F5A623;
+      border: 3px solid rgba(20,23,28,0.075);
+      border-top-color: var(--ink);
       border-radius: 50%;
       animation: aiSpin 0.8s linear infinite;
     }
@@ -473,12 +473,12 @@ function injectAIReportStyles() {
     .ai-loading-text { font-weight: 600; color: var(--text); font-size: 0.95rem; }
     .ai-loading-sub { color: var(--text-muted); font-size: 0.82rem; }
 
-    .ai-output-box { border-top: 1px solid rgba(255,255,255,0.05); }
+    .ai-output-box { border-top: 1px solid rgba(20,23,28,0.035); }
     .ai-output-toolbar {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 28px;
-      background: rgba(255,255,255,0.02);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(20,23,28,0.014);
+      border-bottom: 1px solid rgba(20,23,28,0.028);
       flex-wrap: wrap; gap: 10px;
     }
     .ai-output-label {
@@ -488,24 +488,24 @@ function injectAIReportStyles() {
     }
     .ai-report-content {
       padding: 28px;
-      color: var(--text, #F0EDE8);
+      color: var(--text, #14171C);
       font-size: 0.9rem; line-height: 1.75;
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font);
     }
     .ai-rpt-section {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.15rem; letter-spacing: 1px;
-      color: #F5A623;
+      font-family: var(--font); font-weight: 600;
+      font-size: 0.83rem; letter-spacing: -0.01em;
+      color: var(--ink);
       margin: 22px 0 10px;
       padding-bottom: 6px;
-      border-bottom: 1px solid rgba(245,166,35,0.15);
+      border-bottom: 1px solid rgba(20,23,28,0.075);
     }
     .ai-rpt-bullet {
       padding: 4px 0 4px 14px;
-      border-left: 2px solid rgba(245,166,35,0.2);
+      border-left: 2px solid rgba(20,23,28,0.1);
       margin: 4px 0;
       font-size: 0.87rem;
-      color: var(--text-2, #A09D99);
+      color: var(--text-2, #5B6270);
     }
 
     /* WhatsApp Panel */
@@ -516,12 +516,12 @@ function injectAIReportStyles() {
     }
     .whatsapp-header {
       display: flex; align-items: center; gap: 10px;
-      font-weight: 700; font-size: 1rem; color: #25D366;
+      font-weight: 700; font-size: 1rem; color: #067647;
       margin-bottom: 18px;
     }
     .wa-preview { margin: 14px 0; }
     .wa-bubble {
-      background: #1a2c1a;
+      background: #FFFFFF;
       border: 1px solid rgba(37,211,102,0.2);
       border-radius: 12px; padding: 14px 16px;
       font-size: 0.82rem; line-height: 1.6;
@@ -530,13 +530,13 @@ function injectAIReportStyles() {
     }
     .wa-send-btn {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 14px; background: #25D366; color: #fff;
+      padding: 14px; background: #128C4A; color: #fff;
       border: none; border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font);
       font-size: 0.95rem; font-weight: 700;
       cursor: pointer; transition: all 0.2s;
     }
-    .wa-send-btn:hover { background: #1db954; transform: translateY(-1px); }
+    .wa-send-btn:hover { background: #0E6E3A; }
 
     @media (max-width: 600px) {
       .ai-control-row { flex-direction: column; }

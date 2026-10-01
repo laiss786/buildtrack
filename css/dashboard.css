@@ -1,49 +1,50 @@
 /* ── dashboard.css — BuildTrack v2 Command Centre ── */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url("tokens.css");
 
 /* ═══════════════════════════════════════════════
    1. DESIGN TOKENS
 ═══════════════════════════════════════════════ */
 :root {
-  /* Brand */
-  --gold:         #F5A623;
-  --gold-hover:   #f0b83a;
-  --gold-dim:     rgba(245,166,35,0.12);
-  --gold-border:  rgba(245,166,35,0.3);
+  /* Brand (mapped onto the shared light tokens in tokens.css) */
+  --gold:         var(--ink);
+  --gold-hover:   var(--ink-hover);
+  --gold-dim:     rgba(20,23,28,0.06);
+  --gold-border:  rgba(20,23,28,0.18);
 
   /* Surfaces */
-  --coal:         #0A0A0C;
-  --surface:      #111114;
-  --surface-2:    #18181C;
-  --surface-3:    #222227;
-  --surface-4:    #2C2C32;
+  --coal:         var(--bg);
+  --surface:      var(--card);
+  --surface-2:    var(--card);
+  --surface-3:    var(--subtle-bg);
+  --surface-4:    #E6E9EE;
 
   /* Borders */
-  --border:       rgba(255,255,255,0.06);
-  --border-hover: rgba(255,255,255,0.12);
+  --border:       var(--line);
+  --border-hover: var(--line-strong);
 
   /* Text */
-  --text:         #F0EDE8;
-  --text-2:       #A09D99;
-  --text-3:       #5C5A57;
+  --text:         var(--ink);
+  --text-2:       var(--muted);
+  --text-3:       var(--faint);
+  --text-muted:   var(--faint);
 
   /* Status */
-  --success:      #00C48C;
-  --success-dim:  rgba(0,196,140,0.1);
-  --danger:       #FF5252;
-  --danger-dim:   rgba(255,82,82,0.1);
-  --warning:      #FFB020;
-  --warning-dim:  rgba(255,176,32,0.1);
-  --info:         #4FC3F7;
-  --info-dim:     rgba(79,195,247,0.1);
+  --success:      var(--ok);
+  --success-dim:  var(--ok-bg);
+  --danger:       var(--error);
+  --danger-dim:   var(--error-bg);
+  --warning:      var(--warn);
+  --warning-dim:  var(--warn-bg);
+  --info:         #175CD3;
+  --info-dim:     #EFF8FF;
 
   /* Dimensions */
   --sidebar-w:    72px;
   --sidebar-exp:  240px;
-  --radius-sm:    8px;
-  --radius:       14px;
-  --radius-lg:    20px;
-  --radius-xl:    28px;
+  --radius-sm:    6px;
+  --radius:       10px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
 }
 
 /* ═══════════════════════════════════════════════
@@ -56,7 +57,7 @@ html { scroll-behavior: smooth; }
 body {
   background:  var(--coal);
   color:        var(--text);
-  font-family:  'DM Sans', sans-serif;
+  font-family:  var(--font);
   font-size:    15px;
   line-height:  1.5;
   overflow:     hidden;
@@ -69,8 +70,8 @@ body::before {
   position:  fixed;
   inset:     0;
   background-image:
-    linear-gradient(rgba(245,166,35,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,166,35,0.015) 1px, transparent 1px);
+    linear-gradient(rgba(20,23,28,0.007) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,23,28,0.007) 1px, transparent 1px);
   background-size: 80px 80px;
   pointer-events: none;
   z-index: 0;
@@ -106,7 +107,7 @@ body::before {
 
 .sidebar:hover {
   width: var(--sidebar-exp);
-  box-shadow: 8px 0 40px rgba(0,0,0,0.6);
+  box-shadow: 8px 0 40px rgba(16,24,40,0.12);
 }
 
 /* Logo area */
@@ -128,16 +129,18 @@ body::before {
   align-items:   center;
   justify-content: center;
   flex-shrink:   0;
-  font-family:   'Bebas Neue', sans-serif;
-  font-size:     1rem;
-  color:         #0A0A0C;
-  letter-spacing: 0;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.72rem;
+  color:         #FFFFFF;
+  letter-spacing: -0.01em;
 }
 
 .logo-text {
-  font-family:   'Bebas Neue', sans-serif;
-  font-size:     1.3rem;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.94rem;
+  letter-spacing: -0.01em;
   color:         var(--text);
   white-space:   nowrap;
   opacity:       0;
@@ -283,7 +286,7 @@ body::before {
   border-radius:  var(--radius-sm);
   color:          var(--text-3);
   cursor:         pointer;
-  font-family:    'DM Sans', sans-serif;
+  font-family:    var(--font);
   font-size:      0.88rem;
   font-weight:    500;
   transition:     background 0.15s, color 0.15s;
@@ -316,15 +319,16 @@ body::before {
   justify-content: space-between;
   padding:      0 36px;
   height:       72px;
-  background:   rgba(10,10,12,0.85);
+  background:   rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
 
 .topbar-title {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      1.7rem;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.22rem;
+  letter-spacing: -0.01em;
   color:          var(--text);
 }
 
@@ -354,8 +358,8 @@ body::before {
 }
 
 @keyframes pulse {
-  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(0,196,140,0.4); }
-  50%      { opacity:0.7; box-shadow: 0 0 0 6px rgba(0,196,140,0); }
+  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(6,118,71,0.4); }
+  50%      { opacity:0.7; box-shadow: 0 0 0 6px rgba(6,118,71,0); }
 }
 
 /* Sections */
@@ -371,9 +375,10 @@ body::before {
    6. TYPOGRAPHY SYSTEM
 ═══════════════════════════════════════════════ */
 .page-title {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      2.2rem;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.58rem;
+  letter-spacing: -0.01em;
   color:          var(--text);
   line-height:    1;
 }
@@ -446,9 +451,10 @@ body::before {
 }
 
 .stat-value {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      2.6rem;
-  letter-spacing: 1px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.87rem;
+  letter-spacing: -0.01em;
   line-height:    1;
   color:          var(--text);
 }
@@ -500,9 +506,9 @@ body::before {
 }
 
 .project-card:hover {
-  border-color:  rgba(245,166,35,0.25);
+  border-color:  rgba(20,23,28,0.125);
   transform:     translateY(-3px);
-  box-shadow:    0 12px 40px rgba(0,0,0,0.4);
+  box-shadow:    0 12px 40px rgba(16,24,40,0.1);
 }
 
 .project-card:hover::before { transform: scaleX(1); }
@@ -531,7 +537,7 @@ body::before {
 }
 
 .proj-status-badge.done {
-  background: rgba(255,255,255,0.04);
+  background: rgba(20,23,28,0.028);
   color:      var(--text-3);
   border:     1px solid var(--border);
 }
@@ -590,7 +596,7 @@ body::before {
   gap:           8px;
   padding:       10px 20px;
   border-radius: var(--radius-sm);
-  font-family:   'DM Sans', sans-serif;
+  font-family:   var(--font);
   font-size:     0.88rem;
   font-weight:   600;
   cursor:        pointer;
@@ -601,12 +607,12 @@ body::before {
 
 .btn-primary {
   background: var(--gold);
-  color:      #0A0A0C;
+  color:      #FFFFFF;
 }
 .btn-primary:hover {
   background:  var(--gold-hover);
   transform:   translateY(-1px);
-  box-shadow:  0 6px 20px rgba(245,166,35,0.3);
+  box-shadow: none;
 }
 
 .btn-secondary {
@@ -619,9 +625,9 @@ body::before {
 .btn-danger {
   background: var(--danger-dim);
   color:      var(--danger);
-  border:     1px solid rgba(255,82,82,0.2);
+  border:     1px solid rgba(180,35,24,0.2);
 }
-.btn-danger:hover { background: rgba(255,82,82,0.2); }
+.btn-danger:hover { background: rgba(180,35,24,0.2); }
 
 .btn-ghost {
   background: transparent;
@@ -661,7 +667,7 @@ body::before {
   padding:       12px 14px;
   color:         var(--text);
   font-size:     0.9rem;
-  font-family:   'DM Sans', sans-serif;
+  font-family:   var(--font);
   outline:       none;
   transition:    border-color 0.2s, background 0.2s;
 }
@@ -671,7 +677,7 @@ body::before {
 .form-control:focus {
   border-color: var(--gold);
   background:   var(--surface-4);
-  box-shadow:   0 0 0 3px rgba(245,166,35,0.08);
+  box-shadow:   0 0 0 3px rgba(59,91,219,0.25);
 }
 
 textarea.form-control { resize: vertical; min-height: 100px; }
@@ -687,7 +693,7 @@ select.form-control option { background: var(--surface-3); }
   display:         none;
   position:        fixed;
   inset:           0;
-  background:      rgba(0,0,0,0.75);
+  background:      rgba(20,23,28,0.45);
   backdrop-filter: blur(8px);
   z-index:         500;
   align-items:     center;
@@ -721,9 +727,10 @@ select.form-control option { background: var(--surface-3); }
 }
 
 .modal-title {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      1.6rem;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
 }
 
 .modal-subtitle { color: var(--text-2); font-size: 0.85rem; margin-top: 4px; }
@@ -932,13 +939,13 @@ select.form-control option { background: var(--surface-3); }
 .att-tile.pending .att-status-chip { background: var(--surface-3); color: var(--text-3); }
 .att-tile.pending .worker-initial  { color: var(--text-2); }
 
-.att-tile.present  { border-color: rgba(0,196,140,0.4); background: rgba(0,196,140,0.04); }
+.att-tile.present  { border-color: rgba(6,118,71,0.4); background: rgba(6,118,71,0.04); }
 .att-tile.present .att-status-chip { background: var(--success-dim); color: var(--success); }
-.att-tile.present .worker-initial  { color: var(--success); border-color: rgba(0,196,140,0.3); }
+.att-tile.present .worker-initial  { color: var(--success); border-color: rgba(6,118,71,0.3); }
 
-.att-tile.absent   { border-color: rgba(255,82,82,0.4); background: rgba(255,82,82,0.04); }
+.att-tile.absent   { border-color: rgba(180,35,24,0.4); background: rgba(180,35,24,0.04); }
 .att-tile.absent .att-status-chip  { background: var(--danger-dim); color: var(--danger); }
-.att-tile.absent .worker-initial   { color: var(--danger); border-color: rgba(255,82,82,0.3); }
+.att-tile.absent .worker-initial   { color: var(--danger); border-color: rgba(180,35,24,0.3); }
 
 /* ═══════════════════════════════════════════════
    15. TABLE
@@ -1009,18 +1016,20 @@ select.form-control option { background: var(--surface-3); }
 }
 
 .cs-number {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      7rem;
-  letter-spacing: 5px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 5.04rem;
+  letter-spacing: -0.01em;
   color:          var(--surface-3);
   line-height:    1;
   margin-bottom:  0;
 }
 
 .cs-title {
-  font-family:    'Bebas Neue', sans-serif;
-  font-size:      2rem;
-  letter-spacing: 3px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.44rem;
+  letter-spacing: -0.01em;
   color:          var(--text-2);
   margin-bottom:  10px;
 }
@@ -1106,7 +1115,7 @@ select.form-control option { background: var(--surface-3); }
   border: none;
   background: transparent;
   color: var(--text-3);
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -1133,7 +1142,8 @@ select.form-control option { background: var(--surface-3); }
   padding: 16px 18px;
 }
 .wage-chip-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); font-weight: 700; margin-bottom: 6px; }
-.wage-chip-val   { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: var(--gold); }
+.wage-chip-val   { font-family: var(--font);
+  font-weight: 600; font-size: 1.3rem; letter-spacing: -0.01em; color: var(--gold); }
 
 /* ── ATTENDANCE HISTORY TABLE ── */
 .att-history-filters {
@@ -1223,13 +1233,14 @@ select.form-control option { background: var(--surface-3); }
 .material-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
 .material-sub  { font-size: 0.75rem; color: var(--text-3); margin-top: 2px; }
 .material-qty  {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem;
-  letter-spacing: 0.5px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: -0.01em;
   color: var(--text);
   text-align: right;
 }
-.material-qty span { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--text-3); display: block; font-weight: 600; }
+.material-qty span { font-family: var(--font); font-size: 0.72rem; color: var(--text-3); display: block; font-weight: 600; }
 .stock-low  { color: var(--danger) !important; }
 .stock-ok   { color: var(--success) !important; }
 .stock-warn { color: var(--warning) !important; }
@@ -1277,10 +1288,10 @@ select.form-control option { background: var(--surface-3); }
   cursor: pointer;
   background: transparent;
   color: var(--text-3);
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font);
   transition: all 0.2s;
 }
-.storage-pill.active { background: var(--gold); color: #0A0A0C; }
+.storage-pill.active { background: var(--gold); color: #FFFFFF; }
 
 /* ── EXPENSES SECTION ── */
 .expense-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
@@ -1314,9 +1325,10 @@ select.form-control option { background: var(--surface-3); }
 .expense-meta  { font-size: 0.75rem; color: var(--text-3); margin-top: 2px; }
 
 .expense-amount {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.25rem;
-  letter-spacing: 0.5px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
   color: var(--danger);
   text-align: right;
   white-space: nowrap;
@@ -1352,7 +1364,7 @@ select.form-control option { background: var(--surface-3); }
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font);
   transition: all 0.2s;
 }
 .cat-filter-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
@@ -1416,9 +1428,9 @@ select.form-control option { background: var(--surface-3); }
   font-size: 1.6rem;
   margin-bottom: 12px;
 }
-.doc-icon-pdf  { background: rgba(255,82,82,0.1); }
-.doc-icon-img  { background: rgba(79,195,247,0.1); }
-.doc-icon-xls  { background: rgba(0,196,140,0.1); }
+.doc-icon-pdf  { background: rgba(180,35,24,0.1); }
+.doc-icon-img  { background: rgba(23,92,211,0.1); }
+.doc-icon-xls  { background: rgba(6,118,71,0.1); }
 .doc-icon-doc  { background: var(--info-dim); }
 .doc-icon-misc { background: var(--surface-3); }
 
@@ -1478,7 +1490,8 @@ select.form-control option { background: var(--surface-3); }
 }
 .worker-row-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
 .worker-row-sub  { font-size: 0.75rem; color: var(--text-3); }
-.attendance-pct  { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; margin-left: auto; }
+.attendance-pct  { font-family: var(--font);
+  font-weight: 600; font-size: 0.86rem; margin-left: auto; }
 .pct-high   { color: var(--success); }
 .pct-medium { color: var(--warning); }
 .pct-low    { color: var(--danger); }
@@ -1574,7 +1587,7 @@ select.form-control option { background: var(--surface-3); }
   font-size: 0.88rem;
   font-weight: 500;
   color: var(--text);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 24px rgba(16,24,40,0.1);
   animation: toastIn 0.3s ease both;
   pointer-events: all;
   display: flex;
@@ -1583,8 +1596,8 @@ select.form-control option { background: var(--surface-3); }
   min-width: 260px;
   max-width: 360px;
 }
-.toast.success { border-color: rgba(0,196,140,0.3); }
-.toast.error   { border-color: rgba(255,82,82,0.3); }
+.toast.success { border-color: rgba(6,118,71,0.3); }
+.toast.error   { border-color: rgba(180,35,24,0.3); }
 .toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .toast.success .toast-dot { background: var(--success); }
 .toast.error   .toast-dot { background: var(--danger); }
@@ -1619,7 +1632,7 @@ select.form-control option { background: var(--surface-3); }
 .install-popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(20,23,28,0.42);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
@@ -1691,20 +1704,22 @@ select.form-control option { background: var(--surface-3); }
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
-  box-shadow: 0 8px 28px rgba(245,166,35,0.35);
+  box-shadow: none;
 }
 
 .install-icon-inner {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  color: #0A0A0C;
-  letter-spacing: 1px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
 }
 
 .install-popup-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
   color: var(--text);
   margin-bottom: 8px;
 }
@@ -1743,10 +1758,10 @@ select.form-control option { background: var(--surface-3); }
   width: 100%;
   padding: 16px;
   background: var(--gold);
-  color: #0A0A0C;
+  color: #FFFFFF;
   border: none;
   border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font);
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -1757,7 +1772,7 @@ select.form-control option { background: var(--surface-3); }
 .install-popup-btn:hover {
   background: var(--gold-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(245,166,35,0.3);
+  box-shadow: none;
 }
 
 /* iOS step guide */
@@ -1813,7 +1828,7 @@ select.form-control option { background: var(--surface-3); }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text-3);
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -2147,7 +2162,7 @@ select.form-control option { background: var(--surface-3); }
     left: 0;
     right: 0;
     z-index: 300;
-    background: rgba(17,17,20,0.95);
+    background: rgba(255,255,255,0.96);
     border-top: 1px solid var(--border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -2179,7 +2194,7 @@ select.form-control option { background: var(--surface-3); }
     border: none;
     background: transparent;
     color: var(--text-3);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font);
     font-size: 0.56rem;
     font-weight: 600;
     letter-spacing: 0.03em;
@@ -2206,7 +2221,7 @@ select.form-control option { background: var(--surface-3); }
   }
   .bottom-nav-item.active svg {
     transform: translateY(-1px);
-    filter: drop-shadow(0 0 5px rgba(245,166,35,0.55));
+    filter: drop-shadow(0 0 5px rgba(20,23,28,0.275));
   }
 
   /* Gold dot indicator above active icon */
@@ -2261,4 +2276,112 @@ select.form-control option { background: var(--surface-3); }
 ═════════════════════════ */
 @media (min-width: 769px) {
   .bottom-nav { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════
+   LIGHT REFRESH — quiet, flat surfaces.
+   Overrides the decorative bits of the old dark theme.
+═══════════════════════════════════════════════ */
+body::before,
+.stat-card::after,
+.project-card::before { display: none; }
+
+.stat-card:hover,
+.project-card:hover,
+.doc-card:hover,
+.btn-primary:hover,
+.install-popup-btn:hover { transform: none; }
+
+.card,
+.stat-card,
+.project-card { box-shadow: var(--shadow-sm); }
+.project-card:hover { box-shadow: var(--shadow-sm); border-color: var(--border-hover); }
+.project-card.finished { opacity: 0.7; }
+
+.status-dot,
+.live .dot { animation: none; }
+@media (max-width: 768px) { .status-dot { animation: none !important; } }
+
+.bottom-nav-item.active svg { transform: none; filter: none; }
+
+.topbar-title { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.page-title   { line-height: 1.2; letter-spacing: -0.02em; }
+.page-sub     { font-weight: 400; }
+
+.stat-value,
+.wage-chip-val,
+.attendance-pct { font-variant-numeric: tabular-nums; }
+
+.nav-item.active { color: var(--text); font-weight: 600; }
+
+@keyframes sectionIn { from { opacity: 0; } to { opacity: 1; } }
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Forms: white fields with a visible edge, sentence-case labels (matches sign-in) */
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+}
+.form-control {
+  background: var(--card);
+  border-color: var(--line-strong);
+  min-height: 44px;
+  font-size: 0.95rem;
+}
+.form-control::placeholder { color: var(--placeholder); }
+.form-control:hover { border-color: #B4BAC4; }
+.form-control:focus { background: var(--card); border-color: var(--ink); }
+select.form-control option { background: var(--card); }
+.modal { backdrop-filter: none; }
+
+/* Fields used by injected panels (weekly report, AI report) */
+.field-group { margin-bottom: 0; }
+.field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.field-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: 400 0.95rem var(--font);
+}
+.field-input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(59,91,219,0.25); }
+
+.ai-generate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font: 500 0.92rem var(--font);
+  cursor: pointer;
+}
+.ai-generate-btn:hover { background: var(--ink-hover); }
+.ai-generate-btn:disabled { opacity: 0.6; cursor: progress; }
+
+.weekly-report-card { border: 1px solid var(--border) !important; border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-sm); }
+
+@media (max-width: 768px) {
+  .bottom-nav-item { text-transform: none; letter-spacing: 0; font-size: 0.64rem; font-weight: 500; }
 }

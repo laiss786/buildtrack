@@ -173,10 +173,10 @@ function updateOfflineBanner(isOnline) {
           justify-content: center;
           gap: 10px;
           padding: 10px 20px;
-          background: #1a1200;
-          border-bottom: 1px solid rgba(245,166,35,0.4);
-          color: #F5A623;
-          font-family: 'DM Sans', sans-serif;
+          background: var(--warn-bg);
+          border-bottom: 1px solid var(--warn-line);
+          color: var(--warn);
+          font-family: var(--font);
           font-size: 0.82rem;
           font-weight: 500;
           transform: translateY(-100%);
@@ -187,13 +187,13 @@ function updateOfflineBanner(isOnline) {
         .offline-dot {
           width: 8px; height: 8px;
           border-radius: 50%;
-          background: #F5A623;
-          animation: offlinePulse 1.5s ease-in-out infinite;
+          background: var(--warn);
+          
           flex-shrink: 0;
         }
         .offline-pending-badge {
-          background: rgba(245,166,35,0.15);
-          border: 1px solid rgba(245,166,35,0.35);
+          background: #FFFFFF;
+          border: 1px solid var(--warn-line);
           border-radius: 100px;
           padding: 2px 10px;
           font-size: 0.75rem;
@@ -207,12 +207,12 @@ function updateOfflineBanner(isOnline) {
           position: fixed;
           bottom: 24px; left: 50%;
           transform: translateX(-50%) translateY(20px);
-          background: #0D2B1B;
-          border: 1px solid rgba(0,196,140,0.35);
-          color: #00C48C;
+          background: var(--ok-bg);
+          border: 1px solid var(--ok-line);
+          color: var(--ok);
           padding: 12px 22px;
           border-radius: 100px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font);
           font-size: 0.85rem;
           font-weight: 600;
           z-index: 99999;

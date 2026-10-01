@@ -107,9 +107,9 @@ const SVG_DELETE = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" 
 // 1. NAVIGATION
 // ═══════════════════════════════════════════════════════
 const NAV_TITLES = {
-  projects:"PROJECTS", dailyLogs:"SITE JOURNAL", labourers:"LABOURERS",
-  attendance:"ATTENDANCE", payroll:"PAYROLL", materials:"MATERIALS & INVENTORY",
-  expenses:"EXPENSES", issues:"SITE ISSUES", documents:"DOCUMENT VAULT", reports:"REPORTS",
+  projects:"Projects", dailyLogs:"Site journal", labourers:"Labourers",
+  attendance:"Attendance", payroll:"Payroll", materials:"Materials & inventory",
+  expenses:"Expenses", issues:"Site issues", documents:"Document vault", reports:"Reports",
 };
 
 document.querySelectorAll(".nav-item").forEach(item => {
@@ -120,7 +120,7 @@ document.querySelectorAll(".nav-item").forEach(item => {
     const id = item.dataset.section;
     document.getElementById(id)?.classList.add("active");
     const tb = document.getElementById("topbarTitle");
-    if (tb) tb.textContent = NAV_TITLES[id] || id.toUpperCase();
+    if (tb) tb.textContent = NAV_TITLES[id] || id;
 
     if (id === "projects")   loadProjects();
     if (id === "dailyLogs")  initDailyLogs();
@@ -749,7 +749,7 @@ async function loadMaterialTxns() {
             ${badge}
             <div><div style="font-size:0.88rem;font-weight:600;color:var(--text);">${t.materialName||"Material"}</div><div style="font-size:0.72rem;color:var(--text-3);">${t.notes||""}</div></div>
           </div>
-          <div style="text-align:right;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${t.type==="in"?"var(--success)":t.type==="out"?"var(--danger)":"var(--info)"};">
+          <div style="text-align:right;font-weight:600;font-size:0.95rem;font-variant-numeric:tabular-nums;color:${t.type==="in"?"var(--success)":t.type==="out"?"var(--danger)":"var(--info)"};">
             ${t.type==="in"?"+":"-"}${t.quantity} ${t.unit||""}
           </div>
           <div style="font-size:0.75rem;color:var(--text-3);">${t.date||""}</div>

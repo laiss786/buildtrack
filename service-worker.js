@@ -1,7 +1,7 @@
 // service-worker.js — BuildTrack PWA v4
 // v4: Offline-first for app shell. JS always fresh. IndexedDB sync via offline-sync.js.
 
-const CACHE_NAME = "buildtrack-v4";
+const CACHE_NAME = "buildtrack-v5";
 
 const STATIC_ASSETS = [
   "/",
@@ -9,9 +9,10 @@ const STATIC_ASSETS = [
   "/login.html",
   "/register.html",
   "/dashboard.html",
-  "/css/style.css",
+  "/css/tokens.css",
+  "/css/auth.css",
   "/css/dashboard.css",
-  "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap",
+  "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap",
 ];
 
 // ── Install ───────────────────────────────────────────────────

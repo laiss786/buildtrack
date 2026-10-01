@@ -256,18 +256,18 @@ export function injectWeeklyReportUI() {
 
     <style>
       .weekly-report-card {
-        background: var(--surface-2, #1C1C1F);
-        border: 1px solid rgba(245,166,35,0.2);
+        background: var(--surface-2, #FFFFFF);
+        border: 1px solid rgba(20,23,28,0.1);
         border-radius: 20px;
         overflow: hidden;
       }
       .wr-header { padding: 28px 28px 0; margin-bottom: 20px; }
       .wr-title {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.8rem; letter-spacing: 1px;
-        color: var(--text, #F0EDE8); margin-bottom: 6px;
+        font-family: var(--font); font-weight: 600;
+        font-size: 1.3rem; letter-spacing: -0.01em;
+        color: var(--text, #14171C); margin-bottom: 6px;
       }
-      .wr-subtitle { color: var(--text-muted, #7A7872); font-size: 0.85rem; }
+      .wr-subtitle { color: var(--text-muted, #6E7480); font-size: 0.85rem; }
       .wr-stats-row {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -276,14 +276,14 @@ export function injectWeeklyReportUI() {
       }
       .wr-controls { padding: 0 28px 24px; }
       .wr-control-row { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
-      .wr-output-box { border-top: 1px solid rgba(255,255,255,0.05); }
+      .wr-output-box { border-top: 1px solid rgba(20,23,28,0.035); }
       .wr-content {
         padding: 28px;
-        background: var(--surface-3, #141416);
+        background: var(--surface-3, #F0F2F5);
         font-family: monospace;
         font-size: 0.85rem;
         line-height: 1.9;
-        color: var(--text-2, #A09D99);
+        color: var(--text-2, #5B6270);
         white-space: pre-wrap;
         max-height: 600px;
         overflow-y: auto;

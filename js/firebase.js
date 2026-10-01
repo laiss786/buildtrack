@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import {
   getAuth,
   setPersistence,
+  browserLocalPersistence,
   browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -23,9 +24,13 @@ const auth    = getAuth(app);
 const db      = getFirestore(app);
 const storage = getStorage(app);
 
-// SESSION persistence = login is tied to this browser tab only.
+// SESSION persistence (default) = login is tied to this browser tab only.
 // When the tab closes or user logs out, the session is fully cleared.
 // This prevents one user's session from bleeding into another account.
-setPersistence(auth, browserSessionPersistence).catch(console.error);
+// LOCAL persistence only when the user ticked "Remember me" at login.
+const REMEMBER_KEY = "bt_remember";
+let remember = false;
+try { remember = localStorage.getItem(REMEMBER_KEY) === "1"; } catch {}
+setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence).catch(console.error);
 
-export { app, auth, db, storage };
+export { app, auth, db, storage, REMEMBER_KEY };

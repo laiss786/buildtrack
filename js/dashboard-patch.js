@@ -98,11 +98,11 @@ function patchDailyLogsForm() {
       const el = document.createElement("div");
       el.className = "timeline-item";
       el.innerHTML = `
-        <div class="log-card" style="opacity:0.65;border:1px dashed rgba(245,166,35,0.3);">
+        <div class="log-card" style="opacity:0.65;border:1px dashed var(--warn-line);">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
             <span class="log-date-tag">${data.date}</span>
             <span class="log-project-tag">${data.project}</span>
-            <span style="font-size:0.72rem;color:#F5A623;background:rgba(245,166,35,0.1);padding:2px 8px;border-radius:100px;">⏳ Pending sync</span>
+            <span style="font-size:0.72rem;color:var(--warn);background:var(--warn-bg);padding:2px 8px;border-radius:100px;">⏳ Pending sync</span>
           </div>
           <div class="log-description">${data.description}</div>
           <div class="log-meta"><span>👷 ${data.labourersPresent} workers</span></div>
@@ -249,8 +249,8 @@ function loadWeeklyReportProjects() {
 
 function showOfflineToast(msg, type = "success") {
   const colors = {
-    success: { bg: "#0D1A0D", border: "rgba(0,196,140,0.3)", text: "#00C48C" },
-    error:   { bg: "#1A0D0D", border: "rgba(255,82,82,0.3)",  text: "#FF5252" }
+    success: { bg: "var(--ok-bg)", border: "var(--ok-line)", text: "var(--ok)" },
+    error:   { bg: "var(--error-bg)", border: "var(--error-line)", text: "var(--error)" }
   };
   const c = colors[type] || colors.success;
 
@@ -261,7 +261,7 @@ function showOfflineToast(msg, type = "success") {
     t.style.cssText = `
       position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(10px);
       padding:11px 22px; border-radius:100px;
-      font-family:'DM Sans',sans-serif; font-size:0.84rem; font-weight:600;
+      font-family:var(--font); font-size:0.84rem; font-weight:600;
       z-index:99998; opacity:0; transition:all 0.28s ease;
       white-space:nowrap; pointer-events:none;
     `;

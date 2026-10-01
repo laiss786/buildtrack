@@ -3,101 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BuildTrack | Login</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Sign in · BuildTrack</title>
+  <link rel="stylesheet" href="css/auth.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0A0A0C">
+  <meta name="theme-color" content="#F6F7F9">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="BuildTrack">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#F5A623">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/maskable_icon_x192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/maskable_icon_x192.png">
 </head>
 <body>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+  <main class="auth">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">BT</span>
+      BuildTrack
+    </a>
 
-  <div class="auth-wrapper">
-    <div class="auth-brand">
-      <div class="brand-eyebrow">Secure Admin Access</div>
-      <h1 class="brand-title">BUILD<br><span>TRACK</span></h1>
-      <p class="brand-desc">
-        Every log, every labourer, every rupee — all in one place. Login and take control of your construction portfolio.
-      </p>
-      <div class="brand-stats">
-        <div>
-          <div class="brand-stat-num">256</div>
-          <div class="brand-stat-label">Bit Encrypted</div>
-        </div>
-        <div>
-          <div class="brand-stat-num">24/7</div>
-          <div class="brand-stat-label">Uptime</div>
-        </div>
+    <!-- ── Sign in ── -->
+    <form class="card" id="loginForm" data-action="login" novalidate aria-labelledby="loginTitle">
+      <h1 class="card-title" id="loginTitle" tabindex="-1">Sign in</h1>
+      <p class="card-sub">Welcome back. Enter your details to open the dashboard.</p>
+
+      <p id="noticeMsg" class="alert alert-ok" role="status"></p>
+      <p id="errorMsg" class="alert alert-error" role="alert"></p>
+
+      <div class="field">
+        <label class="label" for="email">Email</label>
+        <input class="input" type="email" id="email" name="email"
+               autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+               placeholder="name@company.com" required
+               data-required-msg="Enter your email address."
+               aria-describedby="emailError">
+        <p class="field-error" id="emailError"></p>
       </div>
-    </div>
 
-    <div class="auth-form-panel">
-      <div class="auth-card">
-        <h2 class="auth-card-title">Sign In</h2>
-        <p class="auth-card-subtitle">Enter your credentials to access the dashboard.</p>
-
-        <div class="field-group">
-          <label class="field-label">Email Address</label>
-          <input type="email" id="email" class="field-input" placeholder="admin@yoursite.com" autocomplete="email">
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="input-wrap">
+          <input class="input has-toggle" type="password" id="password" name="password"
+                 autocomplete="current-password" required
+                 data-required-msg="Enter your password." data-caps="capsHint"
+                 aria-describedby="passwordError capsHint">
+          <button type="button" class="pw-toggle" data-toggle-for="password"
+                  aria-controls="password" aria-pressed="false" aria-label="Show password">Show</button>
         </div>
-
-        <div class="field-group">
-          <label class="field-label">Password</label>
-          <input type="password" id="password" class="field-input" placeholder="••••••••" autocomplete="current-password">
-        </div>
-
-        <p id="errorMsg"></p>
-
-        <button class="auth-btn" onclick="login()">Access Dashboard</button>
-
-        <div class="auth-footer">
-          Don't have an account? <a href="register.html">Create one here</a>
-        </div>
+        <p class="caps-hint" id="capsHint" hidden>Caps Lock is on.</p>
+        <p class="field-error" id="passwordError"></p>
       </div>
-    </div>
-  </div>
+
+      <div class="options">
+        <label class="check">
+          <input type="checkbox" id="remember" name="remember">
+          Remember me
+        </label>
+        <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+      </div>
+
+      <button type="submit" class="btn" data-busy-label="Signing in…">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btn-label">Sign in</span>
+      </button>
+    </form>
+
+    <!-- ── Forgot password ── -->
+    <form class="card" id="resetForm" data-action="resetPassword" novalidate aria-labelledby="resetTitle" hidden>
+      <h1 class="card-title" id="resetTitle" tabindex="-1">Reset your password</h1>
+      <p class="card-sub">Enter the email you sign in with and we'll send you a reset link.</p>
+
+      <p id="resetMsg" class="alert" role="status"></p>
+
+      <div class="field">
+        <label class="label" for="resetEmail">Email</label>
+        <input class="input" type="email" id="resetEmail" name="email"
+               autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+               placeholder="name@company.com" required
+               data-required-msg="Enter your email address."
+               aria-describedby="resetEmailError">
+        <p class="field-error" id="resetEmailError"></p>
+      </div>
+
+      <button type="submit" class="btn" data-busy-label="Sending…">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btn-label">Send reset link</span>
+      </button>
+
+      <p class="switch"><button type="button" class="link-btn" id="backToLogin">Back to sign in</button></p>
+    </form>
+
+    <p class="switch">Don't have an account? <a href="register.html">Create one</a></p>
+  </main>
+
+  <footer class="page-foot">© BuildTrack</footer>
 
   <script type="module" src="js/auth.js"></script>
+  <script src="js/auth-ui.js" defer></script>
 
-  <style>
-  :root { --gold:#F5A623; --gold-hover:#f0b83a; --gold-border:rgba(245,166,35,0.3); --gold-dim:rgba(245,166,35,0.12); --surface-2:#1C1C1F; --surface-3:#252528; --surface-4:#2C2C32; --border:rgba(255,255,255,0.07); --text:#F0EDE8; --text-2:#A09D99; --radius:14px; --radius-xl:28px; --success:#00C48C; --success-dim:rgba(0,196,140,0.1); }
-  .install-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9999;display:none;align-items:flex-end;justify-content:center;padding:0;opacity:0;transition:opacity .28s ease;}
-  .install-popup-overlay.visible{opacity:1;}
-  .install-popup-box{background:var(--surface-2);border:1px solid var(--border);border-top:1px solid var(--gold-border);border-radius:28px 28px 0 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;position:relative;transform:translateY(40px);transition:transform .3s cubic-bezier(.16,1,.3,1);}
-  .install-popup-overlay.visible .install-popup-box{transform:translateY(0);}
-  .install-popup-box::before{content:'';display:block;width:40px;height:4px;background:var(--surface-4);border-radius:2px;margin:-10px auto 22px;}
-  .install-popup-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-2);}
-  .install-popup-icon{width:72px;height:72px;border-radius:18px;background:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 8px 28px rgba(245,166,35,.35);}
-  .install-icon-inner{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#0A0A0C;letter-spacing:1px;}
-  .install-popup-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--text);margin-bottom:8px;}
-  .install-popup-sub{font-size:.88rem;color:var(--text-2);line-height:1.55;margin-bottom:20px;}
-  .install-popup-features{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
-  .install-feature{display:flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;color:var(--success);background:var(--success-dim);padding:5px 10px;border-radius:100px;}
-  .install-popup-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:var(--gold);color:#0A0A0C;border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .2s;}
-  .install-popup-btn:hover{background:var(--gold-hover);transform:translateY(-1px);}
-  .install-ios-guide,.install-other-guide{background:var(--surface-3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
-  .ios-step{display:flex;align-items:flex-start;gap:12px;padding:8px 0;font-size:.85rem;color:var(--text-2);line-height:1.5;}
-  .ios-step:not(:last-child){border-bottom:1px solid var(--border);}
-  .ios-step-num{width:24px;height:24px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .ios-icon{display:inline-block;padding:2px 6px;background:var(--surface-4);border-radius:4px;}
-  .install-popup-later{display:block;width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;}
-  @media(min-width:769px){.install-popup-overlay{align-items:center;padding:20px;}.install-popup-box{border-radius:28px;max-width:420px;transform:scale(.95) translateY(10px);}.install-popup-overlay.visible .install-popup-box{transform:scale(1) translateY(0);}.install-popup-box::before{display:none;}}
-  </style>
 <!-- ── PWA Install Popup ── -->
 <div id="installPopup" class="install-popup-overlay" style="display:none;">
-  <div class="install-popup-box">
-    <div class="install-popup-close" id="installPopupClose">
+  <div class="install-popup-box" role="dialog" aria-modal="true" aria-label="Install BuildTrack">
+    <button type="button" class="install-popup-close" id="installPopupClose" aria-label="Close">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </div>
+    </button>
     <div class="install-popup-icon">
       <div class="install-icon-inner">BT</div>
     </div>
